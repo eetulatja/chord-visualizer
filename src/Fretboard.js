@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
 
+import { getScalePositionsOnFretboard } from './scales';
+
 
 export default class Fretboards extends PureComponent {
 
@@ -8,21 +10,26 @@ export default class Fretboards extends PureComponent {
 		const strings = 6;
 		const frets = 24;
 
+		const displayedNotes = getScalePositionsOnFretboard(this.props.scale, this.props.rootNote);
+
 		return (
 			<div style={styles.fretboard}>
-				{_.range(strings).map(string => (
+				{_.range(1, strings + 1).map(string => (
 					<div key={string} style={styles.string}>
 						{_.range(frets).map(fret => (
 							<div
+								key={fret}
 								style={{
 									...styles.fret,
-									...(string === strings - 2 && styles.secondLowestStringFret),
-									...(string === strings - 1 && styles.lowestStringFret),
-									...(fret === frets - 2 && string !== strings - 1 && styles.secondHighestFret),
+									...(string === strings - 1 && styles.secondLowestStringFret),
+									...(string === strings && styles.lowestStringFret),
+									...(fret === frets - 2 && string !== strings && styles.secondHighestFret),
 									...(fret === frets - 1 && styles.highestFret),
 								}}
 							>
-								<div style={styles.noteMarker} />
+								{displayedNotes[string] && displayedNotes[string][fret] &&
+									<div style={styles.noteMarker} />
+								}
 							</div>
 						))}
 					</div>

@@ -44,7 +44,8 @@ export default class ChordViewer extends PureComponent {
 
 
     render() {
-        const selectedChord = getTriadFromScale(scales[this.state.scale], this.state.degree);
+        const chordScale = scales[this.state.scale].chordScale ? scales[scales[this.state.scale].chordScale] : scales[this.state.scale];
+        const selectedChord = getTriadFromScale(chordScale, this.state.degree);
 
         return (
             <div style={styles.chord}>
@@ -87,7 +88,7 @@ export default class ChordViewer extends PureComponent {
                     </div>
                 </div>
 
-                <Fretboard />
+                <Fretboard scale={this.state.scale} rootNote={this.state.chord} />
             </div>
         );
     }
