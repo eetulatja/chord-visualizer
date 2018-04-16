@@ -7,24 +7,71 @@ import { getScalePositionsOnFretboard } from './scales';
 export default class Fretboards extends PureComponent {
 
 	render() {
-		const strings = 6;
-		const frets = 24;
+		const numberOfStrings = 6;
+		const numberOfFrets = 24;
+
+		const markerDotFrets = [
+			3,
+			5,
+			7,
+			9,
+			12,
+			15,
+			17,
+			19,
+			21,
+			24,
+		];
 
 		const displayedNotes = getScalePositionsOnFretboard(this.props.scale, this.props.rootNote);
 
 		return (
 			<div style={styles.fretboard}>
-				{_.range(1, strings + 1).map(string => (
+				{markerDotFrets.map(markerFret => (
+					markerFret % 12 !== 0 ?
+						<div
+							key={markerFret}
+							style={{
+								...styles.markerDot,
+								top: `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`,
+								left: `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`,
+							}}
+						/>
+					:
+						<div
+							style={{
+								...styles.doubleMarkerDot,
+								top: `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`,
+								left: `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`,
+							}}
+						>
+							<div
+								key={markerFret + '.1'}
+								style={{
+									...styles.markerDot,
+									top: `${-fretHeight}rem`,
+								}}
+							/>
+							<div
+								key={markerFret + '.2'}
+								style={{
+									...styles.markerDot,
+									top: `${fretHeight}rem`,
+								}}
+							/>
+						</div>
+				))}
+				{_.range(1, numberOfStrings + 1).map(string => (
 					<div key={string} style={styles.string}>
-						{_.range(frets).map(fret => (
+						{_.range(numberOfFrets + 1).map(fret => (
 							<div
 								key={fret}
 								style={{
 									...styles.fret,
-									...(string === strings - 1 && styles.secondLowestStringFret),
-									...(string === strings && styles.lowestStringFret),
-									...(fret === frets - 2 && string !== strings && styles.secondHighestFret),
-									...(fret === frets - 1 && styles.highestFret),
+									...(string === numberOfStrings - 1 && styles.secondLowestStringFret),
+									...(string === numberOfStrings && styles.lowestStringFret),
+									...(fret === numberOfFrets - 1 && string !== numberOfStrings && styles.secondHighestFret),
+									...(fret === numberOfFrets && styles.highestFret),
 								}}
 							>
 								{displayedNotes[string] && displayedNotes[string][fret] &&
@@ -40,10 +87,29 @@ export default class Fretboards extends PureComponent {
 
 }
 
+const fretWidth = 3;
+const fretHeight = 2;
+
+const markerDiameter = 1.5;
+
 const styles = {
 	fretboard: {
+		position: 'relative',
+
 		display: 'flex',
 		flexDirection: 'column',
+	},
+	markerDot: {
+		position: 'absolute',
+
+		width: `${markerDiameter}rem`,
+		height: `${markerDiameter}rem`,
+
+		backgroundColor: 'gray',
+		borderRadius: '100%',
+	},
+	doubleMarkerDot: {
+		position: 'absolute',
 	},
 	string: {
 		display: 'flex',
@@ -51,8 +117,10 @@ const styles = {
 	fret: {
 		position: 'relative',
 
-		width: '3rem',
-		height: '2rem',
+		boxSizing: 'border-box',
+
+		width: `${fretWidth}rem`,
+		height: `${fretHeight}rem`,
 
 		borderTopStyle: 'solid',
 		borderLeftStyle: 'solid',
@@ -76,11 +144,11 @@ const styles = {
 	noteMarker: {
 		position: 'absolute',
 
-		top: '-0.75rem',
-		left: '-2.25rem',
+		top: `${-markerDiameter / 2}rem`,
+		left: `${-fretWidth / 2 - markerDiameter / 2}rem`,
 
-		width: '1.5rem',
-		height: '1.5rem',
+		width: `${markerDiameter}rem`,
+		height: `${markerDiameter}rem`,
 
 		backgroundColor: 'red',
 		borderRadius: '100%',

@@ -144,7 +144,6 @@ export function getScalePositionsOnFretboard(scaleName, rootNote) {
 	};
 
 	const numberOfStrings = Object.keys(stringConfiguration).length;
-	const notesPerString = 3;
 
 	let startingPosition = 25 + rootNote;
 	if (startingPosition < stringConfiguration[numberOfStrings].openNote) {
@@ -153,6 +152,8 @@ export function getScalePositionsOnFretboard(scaleName, rootNote) {
 
 	const scale = scales[scaleName];
 
+	// Currently this just assumes that three octaves worth of notes is
+	// enough for any scale position...
 	const allNotes = [
 		...scale.notes.map(note => note + startingPosition),
 		...scale.notes.map(note => note + startingPosition + 12),
