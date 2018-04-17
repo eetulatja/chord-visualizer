@@ -6,7 +6,7 @@
     "name": "Eetu Latja",
     "email": "eetu.latja@gmail.com"
   },
-  "homepage": "https://eetulatja.github.io/chord-visualizer",
+  "homepage": "http://scales.latja.fi",
   "repository": "github:eetulatja/chord-visualizer",
   "dependencies": {
     "gh-pages": "^1.1.0",
