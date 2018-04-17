@@ -27,40 +27,48 @@ export default class Fretboards extends PureComponent {
 
 		return (
 			<div style={styles.fretboard}>
-				{markerDotFrets.map(markerFret => (
-					markerFret % 12 !== 0 ?
-						<div
-							key={markerFret}
-							style={{
-								...styles.markerDot,
-								top: `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`,
-								left: `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`,
-							}}
-						/>
-					:
-						<div
-							style={{
-								...styles.doubleMarkerDot,
-								top: `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`,
-								left: `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`,
-							}}
-						>
+				{markerDotFrets.map(markerFret => {
+					const top = `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`;
+					const left = `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
+
+					if (markerFret % 12 !== 0) {
+						return (
 							<div
-								key={markerFret + '.1'}
+								key={markerFret}
 								style={{
 									...styles.markerDot,
-									top: `${-fretHeight}rem`,
+									top,
+									left,
 								}}
 							/>
+						);
+					}
+					else {
+						return (
 							<div
-								key={markerFret + '.2'}
+								key={markerFret}
 								style={{
-									...styles.markerDot,
-									top: `${fretHeight}rem`,
+									...styles.doubleMarkerDot,
+									top,
+									left,
 								}}
-							/>
-						</div>
-				))}
+							>
+								<div
+									style={{
+										...styles.markerDot,
+										top: `${-fretHeight}rem`,
+									}}
+								/>
+								<div
+									style={{
+										...styles.markerDot,
+										top: `${fretHeight}rem`,
+									}}
+								/>
+							</div>
+						);
+					}
+				})}
 				{_.range(1, numberOfStrings + 1).map(string => (
 					<div key={string} style={styles.string}>
 						{_.range(numberOfFrets + 1).map(fret => (
