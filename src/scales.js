@@ -124,8 +124,11 @@ export function getNoteByDegree(scale, degree) {
 export function getScalePositionsOnFretboard(scaleName, rootNote, stringConfiguration) {
     const numberOfStrings = Object.keys(stringConfiguration).length;
 
-    let startingPosition = 25 + rootNote;
-    if (startingPosition < stringConfiguration[numberOfStrings].openNote) {
+    let startingPosition = 1 + rootNote;
+    while (startingPosition < stringConfiguration[numberOfStrings].openNote) {
+        // Assume that the string with the highest number is the lowest string.
+        // Start looping from the lowest octave until we find the lowest root note
+        // octave that can be played on the lowest string.
         startingPosition += 12;
     }
 

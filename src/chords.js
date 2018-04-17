@@ -7,9 +7,9 @@ import { getNoteByDegree } from './scales';
 
 export function createChord(rootNote, chordType) {
     const chordNotes = {
-        'chord_major': [0, 4, 7],
-        'chord_minor': [0, 3, 7],
-        'chord_dim': [0, 3, 6],
+        'chord_major': [ 0, 4, 7 ],
+        'chord_minor': [ 0, 3, 7 ],
+        'chord_dim': [ 0, 3, 6 ],
     }[chordType];
 
     return chordNotes;
