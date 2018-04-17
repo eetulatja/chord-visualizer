@@ -6,14 +6,18 @@
     "name": "Eetu Latja",
     "email": "eetu.latja@gmail.com"
   },
+  "homepage": "https://eetulatja.github.io/chord-visualizer",
   "repository": "github:eetulatja/chord-visualizer",
   "dependencies": {
+    "gh-pages": "^1.1.0",
     "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
