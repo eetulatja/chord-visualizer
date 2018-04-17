@@ -21,6 +21,16 @@ const pentatonicMajorScaleNotes = [
     9,
 ];
 
+const harmonicMinorScaleNotes = [
+    0,
+    2,
+    3,
+    5,
+    7,
+    8,
+    11,
+];
+
 const scales = {
     'scale_majorScale': {
         id: 'scale_majorScale',
@@ -110,6 +120,48 @@ const scales = {
         notes: normalizeNotes(rotate(pentatonicMajorScaleNotes, -4)),
         notesPerString: 2,
         chordScale: 'scale_dorianMode',
+    },
+    'scale_harmonicMinorScale': {
+        id: 'scale_harmonicMinorScale',
+        name: 'Harmonic minor scale',
+        notes: harmonicMinorScaleNotes,
+        notesPerString: 3,
+    },
+    'scale_harmonicMinorScaleMode2': {
+        id: 'scale_harmonicMinorScaleMode2',
+        name: 'Harmonic minor scale mode 2 / Locrian #6',
+        notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 1)),
+        notesPerString: 3,
+    },
+    'scale_harmonicMinorScaleMode3': {
+        id: 'scale_harmonicMinorScaleMode3',
+        name: 'Harmonic minor scale mode 3 / Ionian #5',
+        notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 2)),
+        notesPerString: 3,
+    },
+    'scale_harmonicMinorScaleMode4': {
+        id: 'scale_harmonicMinorScaleMode4',
+        name: 'Harmonic minor scale mode 4 / Dorian #4',
+        notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 3)),
+        notesPerString: 3,
+    },
+    'scale_harmonicMinorScaleMode5': {
+        id: 'scale_harmonicMinorScaleMode5',
+        name: 'Harmonic minor scale mode 5 / Phrygian Dominant',
+        notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 4)),
+        notesPerString: 3,
+    },
+    'scale_harmonicMinorScaleMode6': {
+        id: 'scale_harmonicMinorScaleMode6',
+        name: 'Harmonic minor scale mode 6 / Lydian #2',
+        notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 5)),
+        notesPerString: 3,
+    },
+    'scale_harmonicMinorScaleMode7': {
+        id: 'scale_harmonicMinorScaleMode7',
+        name: 'Harmonic minor scale mode 7 / Superlocrian',
+        notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 6)),
+        notesPerString: 3,
     },
 };
 
