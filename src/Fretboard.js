@@ -7,7 +7,7 @@ import { getScalePositionsOnFretboard } from './scales';
 export default class Fretboards extends PureComponent {
 
     render() {
-        const numberOfStrings = 6;
+        const numberOfStrings = Object.keys(this.props.tuning.configuration).length;
         const numberOfFrets = 24;
 
         const markerDotFrets = [
@@ -23,10 +23,15 @@ export default class Fretboards extends PureComponent {
             24,
         ];
 
-        const displayedNotes = getScalePositionsOnFretboard(this.props.scale, this.props.rootNote);
+        const displayedNotes = getScalePositionsOnFretboard(this.props.scale, this.props.rootNote, this.props.tuning.configuration);
 
         return (
-            <div style={styles.fretboard}>
+            <div
+                style={{
+                    ...styles.fretboard,
+                    ...this.props.style,
+                }}
+            >
                 {markerDotFrets.map(markerFret => {
                     const top = `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`;
                     const left = `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
@@ -72,13 +77,23 @@ export default class Fretboards extends PureComponent {
                 {_.range(1, numberOfStrings + 1).map(string => (
                     <div key={string} style={styles.string}>
                         {_.range(numberOfFrets + 1).map(fret => (
+                            // If we just use fret number as the key, React will mess up the styles when switching tunings.
+                            // Therefore, we also add the tuning ID so that React generates new components when switching.
                             <div
-                                key={fret}
+                                key={`${this.props.tuning.id}.${fret}`}
                                 style={{
                                     ...styles.fret,
+
+                                    // Frets on the second lowest string
                                     ...(string === numberOfStrings - 1 && styles.secondLowestStringFret),
+
+                                    // Frets on the lowest string
                                     ...(string === numberOfStrings && styles.lowestStringFret),
+
+                                    // Second highest frets on all but the lowest string
                                     ...(fret === numberOfFrets - 1 && string !== numberOfStrings && styles.secondHighestFret),
+
+                                    // Highest frets
                                     ...(fret === numberOfFrets && styles.highestFret),
                                 }}
                             >

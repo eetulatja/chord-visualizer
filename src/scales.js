@@ -121,28 +121,7 @@ export function getNoteByDegree(scale, degree) {
     return note;
 }
 
-export function getScalePositionsOnFretboard(scaleName, rootNote) {
-    const stringConfiguration = {
-        1: {
-            openNote: 53, // E4
-        },
-        2: {
-            openNote: 48, // B3
-        },
-        3: {
-            openNote: 44, // G3
-        },
-        4: {
-            openNote: 39, // D3
-        },
-        5: {
-            openNote: 34, // A2
-        },
-        6: {
-            openNote: 29, // E2
-        },
-    };
-
+export function getScalePositionsOnFretboard(scaleName, rootNote, stringConfiguration) {
     const numberOfStrings = Object.keys(stringConfiguration).length;
 
     let startingPosition = 25 + rootNote;
