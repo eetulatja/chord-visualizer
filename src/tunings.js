@@ -7,22 +7,22 @@ const tunings = [
         title: 'Guitar 6-string standard',
         configuration: {
             1: {
-                openNote: 53, // E4
+                openNote: 52, // E4
             },
             2: {
-                openNote: 48, // B3
+                openNote: 47, // B3
             },
             3: {
-                openNote: 44, // G3
+                openNote: 43, // G3
             },
             4: {
-                openNote: 39, // D3
+                openNote: 38, // D3
             },
             5: {
-                openNote: 34, // A2
+                openNote: 33, // A2
             },
             6: {
-                openNote: 29, // E2
+                openNote: 28, // E2
             },
         },
     },
@@ -31,22 +31,22 @@ const tunings = [
         title: 'Guitar 6-string drop D',
         configuration: {
             1: {
-                openNote: 53, // E4
+                openNote: 52, // E4
             },
             2: {
-                openNote: 48, // B3
+                openNote: 47, // B3
             },
             3: {
-                openNote: 44, // G3
+                openNote: 43, // G3
             },
             4: {
-                openNote: 39, // D3
+                openNote: 38, // D3
             },
             5: {
-                openNote: 34, // A2
+                openNote: 33, // A2
             },
             6: {
-                openNote: 27, // D2
+                openNote: 26, // D2
             },
         },
     },
@@ -55,16 +55,16 @@ const tunings = [
         title: 'Bass 4-string standard',
         configuration: {
             1: {
-                openNote: 32, // G2
+                openNote: 31, // G2
             },
             2: {
-                openNote: 27, // D2
+                openNote: 26, // D2
             },
             3: {
-                openNote: 22, // A1
+                openNote: 21, // A1
             },
             4: {
-                openNote: 17, // E1
+                openNote: 16, // E1
             },
         },
     },
