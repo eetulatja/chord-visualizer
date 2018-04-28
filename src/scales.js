@@ -173,7 +173,31 @@ export function getNoteByDegree(scale, degree) {
     return note;
 }
 
+function getNotesForString(scaleName, rootNote, string, numberOfFrets) {
+    const scale = scales[scaleName];
+    const scaleNotes = scale.notes.map(note => (note + rootNote) % 12);
+
+    const positions = {};
+    for (let i = 0; i <= numberOfFrets; i++) {
+        if (scaleNotes.includes((string.openNote + i) % 12)) {
+            positions[i] = {
+                isScaleNote: true,
+                isHighlighted: false,
+            };
+        }
+    }
+
+    return positions;
+}
+
 export function getScalePositionsOnFretboard(scaleName, rootNote, stringConfiguration, numberOfFrets) {
+    const allPositions =_.mapValues(stringConfiguration, string => getNotesForString(
+        scaleName,
+        rootNote,
+        string,
+        numberOfFrets,
+    ));
+
     const numberOfStrings = Object.keys(stringConfiguration).length;
 
     let startingPosition = rootNote;
@@ -195,7 +219,7 @@ export function getScalePositionsOnFretboard(scaleName, rootNote, stringConfigur
     ];
     const notesForStrings = _.slice(_.chunk(allNotes, scale.notesPerString), 0, numberOfStrings);
 
-    const positions = _(notesForStrings)
+    const selectedModePositions = _(notesForStrings)
         .mapKeys((stringNotes, index) => numberOfStrings - index)
         .mapValues((stringNotes, string) =>
             _(stringNotes)
@@ -205,5 +229,11 @@ export function getScalePositionsOnFretboard(scaleName, rootNote, stringConfigur
         )
         .value();
 
-    return positions;
+    for (const [ fret, stringPositions ] of Object.entries(selectedModePositions)) {
+        for (const string of Object.keys(stringPositions)) {
+            allPositions[fret][string].isHighlighted = true;
+        }
+    }
+
+    return allPositions;
 }

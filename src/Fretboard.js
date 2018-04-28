@@ -23,7 +23,12 @@ export default class Fretboards extends PureComponent {
             24,
         ];
 
-        const displayedNotes = getScalePositionsOnFretboard(this.props.scale, this.props.rootNote, this.props.tuning.configuration);
+        const displayedNotes = getScalePositionsOnFretboard(
+            this.props.scale,
+            this.props.rootNote,
+            this.props.tuning.configuration,
+            numberOfFrets,
+        );
 
         return (
             <div
@@ -98,7 +103,12 @@ export default class Fretboards extends PureComponent {
                                 }}
                             >
                                 {displayedNotes[string] && displayedNotes[string][fret] &&
-                                    <div style={styles.noteMarker} />
+                                    <div
+                                        style={{
+                                            ...styles.noteMarker,
+                                            ...(displayedNotes[string][fret].isHighlighted && { backgroundColor: 'red' }),
+                                        }}
+                                    />
                                 }
                             </div>
                         ))}
@@ -173,7 +183,7 @@ const styles = {
         width: `${markerDiameter}rem`,
         height: `${markerDiameter}rem`,
 
-        backgroundColor: 'red',
+        backgroundColor: 'lightgrey',
         borderRadius: '100%',
     },
 };
