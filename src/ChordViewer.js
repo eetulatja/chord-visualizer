@@ -104,13 +104,13 @@ export default class ChordViewer extends PureComponent {
                 </select>
 
                 <div style={styles.chordNotes}>
-                    {selectedChord.map(noteIndex => (
-                        <div key={noteIndex} style={styles.chordNote}>
-                            {notes[(noteIndex + this.state.chord) % notes.length]}
+                    {selectedChord.map(({ note }) => (
+                        <div key={note} style={styles.chordNote}>
+                            {notes[(note + this.state.chord) % notes.length]}
                         </div>
                     ))}
                     <div style={styles.chordNote}>
-                        type: {getChordType(selectedChord).name}
+                        type: {getChordType(selectedChord.map(({ note }) => note)).name}
                     </div>
                 </div>
 

@@ -231,7 +231,7 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
     const allNotes = [
         ...notes.map(note => note + startingPosition),
         ...notes.map(note => note + startingPosition + 12),
-        ...notes.map(note => note + startingPosition + 24),
+        ...notes.map(note => note + startingPosition + 2 * 12),
     ];
     const notesForStrings = _.slice(_.chunk(allNotes, scale.notesPerString), 0, numberOfStrings);
 
@@ -240,9 +240,17 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
         .mapValues((stringNotes, string) =>
             _(stringNotes)
                 .mapKeys(note => note - stringConfiguration[string].openNote)
-                .mapValues(note => ({
-                    isChordNote: chord.includes(note % 12),
-                }))
+                .mapValues(note => {
+                    const chordNote = _.find(chord, chordNote => chordNote.note === note % 12);
+
+                    const isChordNote = !_.isUndefined(chordNote);
+                    const chordScaleDegree = isChordNote ? chordNote.chordScaleDegree : undefined;
+
+                    return {
+                        isChordNote,
+                        chordScaleDegree,
+                    };
+                })
                 .value()
         )
         .value();
@@ -254,6 +262,7 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
                 // For example, pentatonic scales.
                 allPositions[fret][string].isHighlighted = true;
                 allPositions[fret][string].isChordNote = position.isChordNote;
+                allPositions[fret][string].chordScaleDegree = position.chordScaleDegree;
             }
         }
     }

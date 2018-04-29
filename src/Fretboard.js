@@ -111,7 +111,9 @@ export default class Fretboards extends PureComponent {
                                             ...(displayedNotes[string][fret].isHighlighted && styles.highlightedNoteMarker),
                                             ...(displayedNotes[string][fret].isChordNote && styles.chordNoteMarker),
                                         }}
-                                    />
+                                    >
+                                        {displayedNotes[string][fret].isChordNote && displayedNotes[string][fret].chordScaleDegree}
+                                    </div>
                                 }
                             </div>
                         ))}
@@ -180,12 +182,17 @@ const styles = {
     noteMarker: {
         position: 'absolute',
 
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+
         top: `${-markerDiameter / 2}rem`,
         left: `${-fretWidth / 2 - markerDiameter / 2}rem`,
 
         width: `${markerDiameter}rem`,
         height: `${markerDiameter}rem`,
 
+        color: 'white',
         backgroundColor: 'lightgrey',
         borderRadius: '100%',
     },

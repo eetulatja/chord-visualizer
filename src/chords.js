@@ -20,7 +20,10 @@ export function createChord(rootNote, chordType) {
 }
 
 export function getTriadFromScale(scale, degree) {
-    const chordNotes = [ 0, 2, 4 ].map(chordNote => getNoteByDegree(scale, chordNote + degree - 1));
+    const chordNotes = [ 0, 2, 4 ].map(chordNote => ({
+        note: getNoteByDegree(scale, chordNote + degree - 1),
+        chordScaleDegree: chordNote + 1,
+    }));
 
     return chordNotes;
 }
