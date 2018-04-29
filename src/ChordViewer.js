@@ -136,6 +136,7 @@ export default class ChordViewer extends PureComponent {
                     rootNote={this.state.chord}
                     tuning={this.state.tuning}
                     style={styles.fretboard}
+                    mode={this.state.mode}
                 />
             </div>
         );

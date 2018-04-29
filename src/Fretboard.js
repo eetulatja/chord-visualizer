@@ -28,6 +28,7 @@ export default class Fretboards extends PureComponent {
             this.props.rootNote,
             this.props.tuning.configuration,
             numberOfFrets,
+            this.props.mode,
         );
 
         return (

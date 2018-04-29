@@ -196,7 +196,7 @@ function getNotesForString(scaleId, rootNote, string, numberOfFrets) {
     return positions;
 }
 
-export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfiguration, numberOfFrets) {
+export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfiguration, numberOfFrets, mode) {
     const allPositions =_.mapValues(stringConfiguration, string => getNotesForString(
         scaleId,
         rootNote,
@@ -206,7 +206,9 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
 
     const numberOfStrings = Object.keys(stringConfiguration).length;
 
-    let startingPosition = rootNote;
+    const scale = getScaleById(scaleId);
+
+    let startingPosition = rootNote + scale.notes[mode - 1];
     while (startingPosition < stringConfiguration[numberOfStrings].openNote) {
         // Assume that the string with the highest number is the lowest string.
         // Start looping from the lowest octave until we find the lowest root note
@@ -214,14 +216,14 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
         startingPosition += 12;
     }
 
-    const scale = getScaleById(scaleId);
-
     // Currently this just assumes that three octaves worth of notes is
     // enough for any scale position...
+    const notes = normalizeNotes(rotate(scale.notes, mode - 1));
+
     const allNotes = [
-        ...scale.notes.map(note => note + startingPosition),
-        ...scale.notes.map(note => note + startingPosition + 12),
-        ...scale.notes.map(note => note + startingPosition + 24),
+        ...notes.map(note => note + startingPosition),
+        ...notes.map(note => note + startingPosition + 12),
+        ...notes.map(note => note + startingPosition + 24),
     ];
     const notesForStrings = _.slice(_.chunk(allNotes, scale.notesPerString), 0, numberOfStrings);
 
