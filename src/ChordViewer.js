@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import _ from 'lodash';
 
 import notes from './notes';
-import scales, { getScaleById } from './scales';
+import scales, { getScaleById, getChordScale } from './scales';
 import { getTriadFromScale, getChordType } from './chords';
 import Fretboard from './Fretboard';
 import tunings, { getTuningById } from './tunings';
@@ -68,8 +68,7 @@ export default class ChordViewer extends PureComponent {
 
 
     render() {
-        const scale = getScaleById(this.state.scale);
-        const chordScale = scale.chordScale ? getScaleById(scale.chordScale) : scale;
+        const chordScale = getChordScale(this.state.scale);
         const selectedChord = getTriadFromScale(chordScale, this.state.degree);
 
         return (
@@ -137,6 +136,7 @@ export default class ChordViewer extends PureComponent {
                     tuning={this.state.tuning}
                     style={styles.fretboard}
                     mode={this.state.mode}
+                    chord={selectedChord}
                 />
             </div>
         );

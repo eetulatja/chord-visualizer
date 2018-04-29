@@ -29,6 +29,7 @@ export default class Fretboards extends PureComponent {
             this.props.tuning.configuration,
             numberOfFrets,
             this.props.mode,
+            this.props.chord,
         );
 
         return (
@@ -107,7 +108,8 @@ export default class Fretboards extends PureComponent {
                                     <div
                                         style={{
                                             ...styles.noteMarker,
-                                            ...(displayedNotes[string][fret].isHighlighted && { backgroundColor: 'red' }),
+                                            ...(displayedNotes[string][fret].isHighlighted && styles.highlightedNoteMarker),
+                                            ...(displayedNotes[string][fret].isChordNote && styles.chordNoteMarker),
                                         }}
                                     />
                                 }
@@ -186,5 +188,11 @@ const styles = {
 
         backgroundColor: 'lightgrey',
         borderRadius: '100%',
+    },
+    highlightedNoteMarker: {
+        backgroundColor: 'red',
+    },
+    chordNoteMarker: {
+        backgroundColor: 'green',
     },
 };

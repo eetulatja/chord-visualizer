@@ -179,6 +179,14 @@ export function getNoteByDegree(scale, degree) {
     return note;
 }
 
+export function getChordScale(scaleId) {
+    const scale = getScaleById(scaleId);
+
+    const chordScale = scale.chordScale ? getScaleById(scale.chordScale) : scale;
+
+    return chordScale;
+}
+
 function getNotesForString(scaleId, rootNote, string, numberOfFrets) {
     const scale = getScaleById(scaleId);
     const scaleNotes = scale.notes.map(note => (note + rootNote) % 12);
@@ -196,7 +204,7 @@ function getNotesForString(scaleId, rootNote, string, numberOfFrets) {
     return positions;
 }
 
-export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfiguration, numberOfFrets, mode) {
+export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfiguration, numberOfFrets, mode, chord) {
     const allPositions =_.mapValues(stringConfiguration, string => getNotesForString(
         scaleId,
         rootNote,
@@ -232,14 +240,21 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
         .mapValues((stringNotes, string) =>
             _(stringNotes)
                 .mapKeys(note => note - stringConfiguration[string].openNote)
-                .mapValues(() => true)
+                .mapValues(note => ({
+                    isChordNote: chord.includes(note % 12),
+                }))
                 .value()
         )
         .value();
 
     for (const [ fret, stringPositions ] of Object.entries(selectedModePositions)) {
-        for (const string of Object.keys(stringPositions)) {
-            allPositions[fret][string].isHighlighted = true;
+        for (const [ string, position ] of Object.entries(stringPositions)) {
+            if (allPositions[fret][string]) {
+                // The scale might not contain all the notes of the chord.
+                // For example, pentatonic scales.
+                allPositions[fret][string].isHighlighted = true;
+                allPositions[fret][string].isChordNote = position.isChordNote;
+            }
         }
     }
 
