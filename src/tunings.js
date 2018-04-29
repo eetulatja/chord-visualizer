@@ -72,7 +72,7 @@ const tunings = [
 
 export default tunings;
 
-export function getTuningbyId(tuningId) {
+export function getTuningById(tuningId) {
     const tuning = _.find(tunings, { id: tuningId });
 
     return tuning;

@@ -31,141 +31,147 @@ const harmonicMinorScaleNotes = [
     11,
 ];
 
-const scales = {
-    'scale_majorScale': {
+const scales = [
+    {
         id: 'scale_majorScale',
         name: 'Major scale',
         notes: majorScaleNotes,
         notesPerString: 3,
     },
-    'scale_minorScale': {
+    {
         id: 'scale_minorScale',
         name: 'Minor scale',
         notes: normalizeNotes(rotate(majorScaleNotes, -2)),
         notesPerString: 3,
     },
-    'scale_ionianMode': {
+    {
         id: 'scale_ionianMode',
         name: 'Ionian mode',
         notes: majorScaleNotes,
         notesPerString: 3,
     },
-    'scale_dorianMode': {
+    {
         id: 'scale_dorianMode',
         name: 'Dorian mode',
         notes: normalizeNotes(rotate(majorScaleNotes, 1)),
         notesPerString: 3,
     },
-    'scale_phrygianMode': {
+    {
         id: 'scale_phrygianMode',
         name: 'Phrygian mode',
         notes: normalizeNotes(rotate(majorScaleNotes, 2)),
         notesPerString: 3,
     },
-    'scale_lydianMode': {
+    {
         id: 'scale_lydianMode',
         name: 'Lydian mode',
         notes: normalizeNotes(rotate(majorScaleNotes, 3)),
         notesPerString: 3,
     },
-    'scale_mixolydianMode': {
+    {
         id: 'scale_mixolydianMode',
         name: 'Mixolydian mode',
         notes: normalizeNotes(rotate(majorScaleNotes, 4)),
         notesPerString: 3,
     },
-    'scale_aeolianMode': {
+    {
         id: 'scale_aeolianMode',
         name: 'Aeolian mode',
         notes: normalizeNotes(rotate(majorScaleNotes, 5)),
         notesPerString: 3,
     },
-    'scale_locrianMode': {
+    {
         id: 'scale_locrianMode',
         name: 'Locrian mode',
         notes: normalizeNotes(rotate(majorScaleNotes, 6)),
         notesPerString: 3,
     },
-    'scale_pentatonicMajor': {
+    {
         id: 'scale_pentatonicMajor',
         name: 'Pentatonic major',
         notes: pentatonicMajorScaleNotes,
         notesPerString: 2,
         chordScale: 'scale_majorScale',
     },
-    'scale_pentatonicMinor': {
+    {
         id: 'scale_pentatonicMinor',
         name: 'Pentatonic minor',
         notes: normalizeNotes(rotate(pentatonicMajorScaleNotes, -1)),
         notesPerString: 2,
         chordScale: 'scale_minorScale',
     },
-    'scale_pentatonicMixolydian': {
+    {
         id: 'scale_pentatonicMixolydian',
         name: 'Pentatonic mixolydian',
         notes: normalizeNotes(rotate(pentatonicMajorScaleNotes, -2)),
         notesPerString: 2,
         chordScale: 'scale_mixolydianMode',
     },
-    'scale_pentatonicFrygian': {
+    {
         id: 'scale_pentatonicFrygian',
         name: 'Pentatonic phrygian',
         notes: normalizeNotes(rotate(pentatonicMajorScaleNotes, -3)),
         notesPerString: 2,
         chordScale: 'scale_phrygianMode',
     },
-    'scale_pentatonicDorian': {
+    {
         id: 'scale_pentatonicDorian',
         name: 'Pentatonic dorian',
         notes: normalizeNotes(rotate(pentatonicMajorScaleNotes, -4)),
         notesPerString: 2,
         chordScale: 'scale_dorianMode',
     },
-    'scale_harmonicMinorScale': {
+    {
         id: 'scale_harmonicMinorScale',
         name: 'Harmonic minor scale',
         notes: harmonicMinorScaleNotes,
         notesPerString: 3,
     },
-    'scale_harmonicMinorScaleMode2': {
+    {
         id: 'scale_harmonicMinorScaleMode2',
         name: 'Harmonic minor scale mode 2 / Locrian #6',
         notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 1)),
         notesPerString: 3,
     },
-    'scale_harmonicMinorScaleMode3': {
+    {
         id: 'scale_harmonicMinorScaleMode3',
         name: 'Harmonic minor scale mode 3 / Ionian #5',
         notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 2)),
         notesPerString: 3,
     },
-    'scale_harmonicMinorScaleMode4': {
+    {
         id: 'scale_harmonicMinorScaleMode4',
         name: 'Harmonic minor scale mode 4 / Dorian #4',
         notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 3)),
         notesPerString: 3,
     },
-    'scale_harmonicMinorScaleMode5': {
+    {
         id: 'scale_harmonicMinorScaleMode5',
         name: 'Harmonic minor scale mode 5 / Phrygian Dominant',
         notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 4)),
         notesPerString: 3,
     },
-    'scale_harmonicMinorScaleMode6': {
+    {
         id: 'scale_harmonicMinorScaleMode6',
         name: 'Harmonic minor scale mode 6 / Lydian #2',
         notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 5)),
         notesPerString: 3,
     },
-    'scale_harmonicMinorScaleMode7': {
+    {
         id: 'scale_harmonicMinorScaleMode7',
         name: 'Harmonic minor scale mode 7 / Superlocrian',
         notes: normalizeNotes(rotate(harmonicMinorScaleNotes, 6)),
         notesPerString: 3,
     },
-};
+];
 
 export default scales;
+
+export function getScaleById(scaleId) {
+    const scale = _.find(scales, { id: scaleId });
+
+    return scale;
+}
 
 export function getNoteByDegree(scale, degree) {
     const note = scale.notes[degree % scale.notes.length];
@@ -173,8 +179,8 @@ export function getNoteByDegree(scale, degree) {
     return note;
 }
 
-function getNotesForString(scaleName, rootNote, string, numberOfFrets) {
-    const scale = scales[scaleName];
+function getNotesForString(scaleId, rootNote, string, numberOfFrets) {
+    const scale = getScaleById(scaleId);
     const scaleNotes = scale.notes.map(note => (note + rootNote) % 12);
 
     const positions = {};
@@ -190,9 +196,9 @@ function getNotesForString(scaleName, rootNote, string, numberOfFrets) {
     return positions;
 }
 
-export function getScalePositionsOnFretboard(scaleName, rootNote, stringConfiguration, numberOfFrets) {
+export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfiguration, numberOfFrets) {
     const allPositions =_.mapValues(stringConfiguration, string => getNotesForString(
-        scaleName,
+        scaleId,
         rootNote,
         string,
         numberOfFrets,
@@ -208,7 +214,7 @@ export function getScalePositionsOnFretboard(scaleName, rootNote, stringConfigur
         startingPosition += 12;
     }
 
-    const scale = scales[scaleName];
+    const scale = getScaleById(scaleId);
 
     // Currently this just assumes that three octaves worth of notes is
     // enough for any scale position...

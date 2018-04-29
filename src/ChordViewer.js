@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import _ from 'lodash';
 
 import notes from './notes';
-import scales from './scales';
+import scales, { getScaleById } from './scales';
 import { getTriadFromScale, getChordType } from './chords';
 import Fretboard from './Fretboard';
-import tunings, { getTuningbyId } from './tunings';
+import tunings, { getTuningById } from './tunings';
 
 
 export default class ChordViewer extends PureComponent {
@@ -17,12 +17,15 @@ export default class ChordViewer extends PureComponent {
         this.selectScale = this.selectScale.bind(this);
         this.selectDegree = this.selectDegree.bind(this);
         this.selectTuning = this.selectTuning.bind(this);
+        this.increaseMode = this.increaseMode.bind(this);
+        this.decreaseMode = this.decreaseMode.bind(this);
 
         this.state = {
             chord: 0,
             scale: 'scale_majorScale',
             degree: 1,
-            tuning: getTuningbyId('tuning_guitar_6string_standard'),
+            tuning: getTuningById('tuning_guitar_6string_standard'),
+            mode: 1,
         };
     }
 
@@ -47,13 +50,26 @@ export default class ChordViewer extends PureComponent {
 
     selectTuning(event) {
         this.setState({
-            tuning: getTuningbyId(event.target.value),
+            tuning: getTuningById(event.target.value),
         });
+    }
+
+    increaseMode() {
+        this.setState(prevState => ({
+            mode: prevState.mode % getScaleById(prevState.scale).notes.length + 1,
+        }));
+    }
+
+    decreaseMode() {
+        this.setState(prevState => ({
+            mode: (prevState.mode - 1 + getScaleById(prevState.scale).notes.length - 1) % getScaleById(prevState.scale).notes.length + 1,
+        }));
     }
 
 
     render() {
-        const chordScale = scales[this.state.scale].chordScale ? scales[scales[this.state.scale].chordScale] : scales[this.state.scale];
+        const scale = getScaleById(this.state.scale);
+        const chordScale = scale.chordScale ? getScaleById(scale.chordScale) : scale;
         const selectedChord = getTriadFromScale(chordScale, this.state.degree);
 
         return (
@@ -67,6 +83,7 @@ export default class ChordViewer extends PureComponent {
                         <option key={i} value={i}>{note}</option>
                     ))}
                 </select>
+
                 <select
                     value={this.state.scale}
                     onChange={this.selectScale}
@@ -76,6 +93,7 @@ export default class ChordViewer extends PureComponent {
                         <option key={scale.id} value={scale.id}>{scale.name}</option>
                     ))}
                 </select>
+
                 <select
                     value={this.state.degree}
                     onChange={this.selectDegree}
@@ -96,6 +114,7 @@ export default class ChordViewer extends PureComponent {
                         type: {getChordType(selectedChord).name}
                     </div>
                 </div>
+
                 <select
                     value={this.state.tuning.id}
                     onChange={this.selectTuning}
@@ -105,6 +124,12 @@ export default class ChordViewer extends PureComponent {
                         <option key={tuning.id} value={tuning.id}>{tuning.title}</option>
                     ))}
                 </select>
+
+                <div>
+                    Mode: {this.state.mode}
+                    <button onClick={this.decreaseMode}>&lt;</button>
+                    <button onClick={this.increaseMode}>&gt;</button>
+                </div>
 
                 <Fretboard
                     scale={this.state.scale}
