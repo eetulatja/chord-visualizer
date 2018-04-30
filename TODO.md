@@ -3,6 +3,7 @@
 ## Refactoring
 
 * Chord type -> Chord quality
+* Scale degree selector (numbers from 1-7) should get the maximum number from `scale.notes.length`.
 
 ## Bugs
 
