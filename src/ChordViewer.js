@@ -79,7 +79,7 @@ export default class ChordViewer extends PureComponent {
 
     render() {
         const chordScale = getChordScale(this.state.scale);
-        const selectedChord = getTriadFromScale(chordScale, this.state.chord);
+        const selectedChord = getTriadFromScale(chordScale, this.state.chord, this.state.rootNote);
 
         return (
             <div style={styles.rootNote}>
@@ -122,13 +122,13 @@ export default class ChordViewer extends PureComponent {
                     </select>
 
                     <span style={styles.chordNote}>
-                        {getChordType(selectedChord.map(({ note }) => note)).name}
+                        {getChordType(selectedChord).name}
                     </span>
 
                     Notes:
-                    {selectedChord.map(({ note }) => (
-                        <span key={note} style={styles.chordNote}>
-                            {notes[(note + this.state.rootNote) % notes.length]}
+                    {selectedChord.map(chordNote => (
+                        <span key={chordNote.note} style={styles.chordNote}>
+                            {notes[chordNote.note]}
                         </span>
                     ))}
                 </label>

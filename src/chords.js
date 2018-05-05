@@ -14,23 +14,30 @@ const chordTypes = {
 
 
 export function createChord(rootNote, chordType) {
-    const chordNotes = chordTypes[chordType];
+    const chord = chordTypes[chordType];
 
-    return chordNotes;
+    return chord;
 }
 
-export function getTriadFromScale(scale, degree) {
-    const chordNotes = [ 0, 2, 4 ].map(chordNote => ({
-        note: getNoteByDegree(scale, chordNote + degree - 1),
-        chordScaleDegree: chordNote + 1,
-    }));
+export function getTriadFromScale(scale, degree, rootNote) {
+    const chord = [ 0, 2, 4 ].map(noteDegree => {
+        const noteRelativeToRoot = getNoteByDegree(scale, noteDegree + degree - 1);
 
-    return chordNotes;
+        const chordNote = {
+            note: (noteRelativeToRoot + rootNote) % notes.length,
+            chordScaleDegree: noteDegree + 1,
+        };
+
+        return chordNote;
+    });
+
+    return chord;
 }
 
-export function getChordType(chordNotes) {
-    const rootNoteName = notes[chordNotes[0]];
-    const normalizedNotes = normalizeNotes(chordNotes);
+export function getChordType(chord) {
+    const rootNote = _.find(chord, { chordScaleDegree: 1 });
+    const rootNoteName = notes[rootNote.note];
+    const normalizedNotes = normalizeNotes(_.map(chord, 'note'));
 
     if (_.isEqual(normalizedNotes, chordTypes['chord_major'])) {
         return {
