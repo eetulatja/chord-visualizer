@@ -10,8 +10,8 @@ import tunings, { getTuningById } from './tunings';
 
 export default class ChordViewer extends PureComponent {
 
-    constructor(...args) {
-        super(...args);
+    constructor(props) {
+        super(props);
 
         this.selectChord = this.selectChord.bind(this);
         this.selectScale = this.selectScale.bind(this);
@@ -19,8 +19,9 @@ export default class ChordViewer extends PureComponent {
         this.selectTuning = this.selectTuning.bind(this);
         this.increaseMode = this.increaseMode.bind(this);
         this.decreaseMode = this.decreaseMode.bind(this);
+        this.copyChordViewer = this.copyChordViewer.bind(this);
 
-        this.state = {
+        this.state = props.initialState || {
             chord: 0,
             scale: 'scale_majorScale',
             degree: 1,
@@ -64,6 +65,10 @@ export default class ChordViewer extends PureComponent {
         this.setState(prevState => ({
             mode: (prevState.mode - 1 + getScaleById(prevState.scale).notes.length - 1) % getScaleById(prevState.scale).notes.length + 1,
         }));
+    }
+
+    copyChordViewer() {
+        this.props.copyChordViewer(this.state);
     }
 
 
@@ -129,6 +134,8 @@ export default class ChordViewer extends PureComponent {
                     <button onClick={this.decreaseMode}>&lt;</button>
                     <button onClick={this.increaseMode}>&gt;</button>
                 </div>
+
+                <button onClick={this.copyChordViewer}>Duplicate</button>
 
                 <Fretboard
                     scale={this.state.scale}
