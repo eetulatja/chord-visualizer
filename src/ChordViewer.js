@@ -13,9 +13,9 @@ export default class ChordViewer extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.selectChord = this.selectChord.bind(this);
+        this.selectRootNote = this.selectRootNote.bind(this);
         this.selectScale = this.selectScale.bind(this);
-        this.selectDegree = this.selectDegree.bind(this);
+        this.selectChord = this.selectChord.bind(this);
         this.selectTuning = this.selectTuning.bind(this);
         this.increaseMode = this.increaseMode.bind(this);
         this.decreaseMode = this.decreaseMode.bind(this);
@@ -23,18 +23,18 @@ export default class ChordViewer extends PureComponent {
         this.removeChordViewer = this.removeChordViewer.bind(this);
 
         this.state = props.initialState || {
-            chord: 0,
+            rootNote: 0,
             scale: 'scale_majorScale',
-            degree: 1,
+            chord: 1,
             tuning: getTuningById('tuning_guitar_6string_standard'),
             mode: 1,
         };
     }
 
 
-    selectChord(event) {
+    selectRootNote(event) {
         this.setState({
-            chord: Number(event.target.value),
+            rootNote: Number(event.target.value),
         });
     }
 
@@ -44,9 +44,9 @@ export default class ChordViewer extends PureComponent {
         });
     }
 
-    selectDegree(event) {
+    selectChord(event) {
         this.setState({
-            degree: Number(event.target.value),
+            chord: Number(event.target.value),
         });
     }
 
@@ -79,75 +79,87 @@ export default class ChordViewer extends PureComponent {
 
     render() {
         const chordScale = getChordScale(this.state.scale);
-        const selectedChord = getTriadFromScale(chordScale, this.state.degree);
+        const selectedChord = getTriadFromScale(chordScale, this.state.chord);
 
         return (
-            <div style={styles.chord}>
-                <select
-                    value={this.state.chord}
-                    onChange={this.selectChord}
-                    style={styles.chordSelect}
-                >
-                    {notes.map((note, i) => (
-                        <option key={i} value={i}>{note}</option>
-                    ))}
-                </select>
+            <div style={styles.rootNote}>
+                <label style={styles.input}>
+                    Root
 
-                <select
-                    value={this.state.scale}
-                    onChange={this.selectScale}
-                    style={styles.chordSelect}
-                >
-                    {_.map(scales, scale => (
-                        <option key={scale.id} value={scale.id}>{scale.name}</option>
-                    ))}
-                </select>
+                    <select
+                        value={this.state.rootNote}
+                        onChange={this.selectRootNote}
+                    >
+                        {notes.map((note, i) => (
+                            <option key={i} value={i}>{note}</option>
+                        ))}
+                    </select>
+                </label>
 
-                <select
-                    value={this.state.degree}
-                    onChange={this.selectDegree}
-                    style={styles.chordSelect}
-                >
-                    {[ 1, 2, 3, 4, 5, 6, 7 ].map((degree, i) => (
-                        <option key={i} value={degree}>{degree}</option>
-                    ))}
-                </select>
+                <label style={styles.input}>
+                    Scale
 
-                <div style={styles.chordNotes}>
+                    <select
+                        value={this.state.scale}
+                        onChange={this.selectScale}
+                    >
+                        {_.map(scales, scale => (
+                            <option key={scale.id} value={scale.id}>{scale.name}</option>
+                        ))}
+                    </select>
+                </label>
+
+                <label style={styles.input}>
+                    Chord
+
+                    <select
+                        value={this.state.chord}
+                        onChange={this.selectChord}
+                    >
+                        {[ 1, 2, 3, 4, 5, 6, 7 ].map((chord, i) => (
+                            <option key={i} value={chord}>{chord}</option>
+                        ))}
+                    </select>
+
+                    <span style={styles.chordNote}>
+                        {getChordType(selectedChord.map(({ note }) => note)).name}
+                    </span>
+
+                    Notes:
                     {selectedChord.map(({ note }) => (
-                        <div key={note} style={styles.chordNote}>
-                            {notes[(note + this.state.chord) % notes.length]}
-                        </div>
+                        <span key={note} style={styles.chordNote}>
+                            {notes[(note + this.state.rootNote) % notes.length]}
+                        </span>
                     ))}
-                    <div style={styles.chordNote}>
-                        type: {getChordType(selectedChord.map(({ note }) => note)).name}
-                    </div>
-                </div>
+                </label>
 
-                <select
-                    value={this.state.tuning.id}
-                    onChange={this.selectTuning}
-                    style={styles.chordSelect}
-                >
-                    {tunings.map(tuning => (
-                        <option key={tuning.id} value={tuning.id}>{tuning.title}</option>
-                    ))}
-                </select>
+                <label style={styles.input}>
+                    Tuning
 
-                <div>
+                    <select
+                        value={this.state.tuning.id}
+                        onChange={this.selectTuning}
+                    >
+                        {tunings.map(tuning => (
+                            <option key={tuning.id} value={tuning.id}>{tuning.title}</option>
+                        ))}
+                    </select>
+                </label>
+
+                <div style={styles.input}>
                     Mode: {this.state.mode}
                     <button onClick={this.decreaseMode}>&lt;</button>
                     <button onClick={this.increaseMode}>&gt;</button>
                 </div>
 
-                <div>
+                <div style={styles.input}>
                     <button onClick={this.copyChordViewer}>Duplicate</button>
                     <button onClick={this.removeChordViewer}>Remove</button>
                 </div>
 
                 <Fretboard
                     scale={this.state.scale}
-                    rootNote={this.state.chord}
+                    rootNote={this.state.rootNote}
                     tuning={this.state.tuning}
                     style={styles.fretboard}
                     mode={this.state.mode}
@@ -160,12 +172,12 @@ export default class ChordViewer extends PureComponent {
 }
 
 const styles = {
-    chord: {
+    rootNote: {
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
     },
-    chordSelect: {
+    input: {
         margin: 10,
     },
     chordNotes: {
