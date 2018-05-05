@@ -20,6 +20,7 @@ export default class ChordViewer extends PureComponent {
         this.increaseMode = this.increaseMode.bind(this);
         this.decreaseMode = this.decreaseMode.bind(this);
         this.copyChordViewer = this.copyChordViewer.bind(this);
+        this.removeChordViewer = this.removeChordViewer.bind(this);
 
         this.state = props.initialState || {
             chord: 0,
@@ -69,6 +70,10 @@ export default class ChordViewer extends PureComponent {
 
     copyChordViewer() {
         this.props.copyChordViewer(this.state);
+    }
+
+    removeChordViewer() {
+        this.props.removeChordViewer(this.props.id);
     }
 
 
@@ -135,7 +140,10 @@ export default class ChordViewer extends PureComponent {
                     <button onClick={this.increaseMode}>&gt;</button>
                 </div>
 
-                <button onClick={this.copyChordViewer}>Duplicate</button>
+                <div>
+                    <button onClick={this.copyChordViewer}>Duplicate</button>
+                    <button onClick={this.removeChordViewer}>Remove</button>
+                </div>
 
                 <Fretboard
                     scale={this.state.scale}

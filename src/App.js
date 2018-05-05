@@ -10,6 +10,7 @@ class App extends PureComponent {
         super(...args);
 
         this.copyChordViewer = this.copyChordViewer.bind(this);
+        this.removeChordViewer = this.removeChordViewer.bind(this);
 
         this.state = {
             chordViewers: [
@@ -34,13 +35,21 @@ class App extends PureComponent {
         this.setState({ chordViewers });
     }
 
+    removeChordViewer(id) {
+        const chordViewers = this.state.chordViewers.filter(chordViewer => chordViewer.id !== id);
+
+        this.setState({ chordViewers });
+    }
+
     render() {
         return (
             <div>
                 {this.state.chordViewers.map(({ id, initialState }) => (
                     <ChordViewer
                         key={id}
+                        id={id}
                         copyChordViewer={this.copyChordViewer}
+                        removeChordViewer={this.removeChordViewer}
                         initialState={initialState}
                     />
                 ))}
