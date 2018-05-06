@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
-import notes from './notes';
-import { normalizeNotes } from './util';
+import notes, { normalizeNotes } from './notes';
 import { getNoteByDegree } from './scales';
 
 

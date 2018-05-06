@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
-import { rotate, normalizeNotes } from './util';
+import { rotate } from './util';
+import { normalizeNotes } from './notes';
 
 
 const majorScaleNotes = [
