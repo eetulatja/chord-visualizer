@@ -8,16 +8,10 @@ import { getNoteByDegree } from './scales';
 const chordTypes = {
     'chord_major': [ 0, 4, 7 ],
     'chord_minor': [ 0, 3, 7 ],
-    'chord_dim': [ 0, 3, 6 ],
+    'chord_diminished': [ 0, 3, 6 ],
     'chord_augmented': [ 0, 4, 8 ],
 };
 
-
-export function createChord(rootNote, chordType) {
-    const chord = chordTypes[chordType];
-
-    return chord;
-}
 
 export function getTriadFromScale(scale, degree, rootNote) {
     const chord = [ 0, 2, 4 ].map(noteDegree => {
@@ -51,10 +45,10 @@ export function getChordType(chord) {
             type: 'chord_minor',
         };
     }
-    else if (_.isEqual(normalizedNotes, chordTypes['chord_dim'])) {
+    else if (_.isEqual(normalizedNotes, chordTypes['chord_diminished'])) {
         return {
             name: `${rootNoteName}dim`,
-            type: 'chord_dim',
+            type: 'chord_diminished',
         };
     }
     else if (_.isEqual(normalizedNotes, chordTypes['chord_augmented'])) {
