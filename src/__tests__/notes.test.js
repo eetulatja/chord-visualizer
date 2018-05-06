@@ -15,7 +15,7 @@ describe('normalizeNotes', () => {
 		expect(normalized).toEqual([ 0, 10, 5 ]);
 	});
 
-	it('Normalize large notes', () => {
+	it('Normalize out-of-bound notes', () => {
 		const normalized = normalizeNotes([ 3, 24, 8 ]);
 
 		expect(normalized).toEqual([ 0, 9, 5 ]);

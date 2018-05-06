@@ -175,7 +175,7 @@ export function getScaleById(scaleId) {
 }
 
 export function getNoteByDegree(scale, degree) {
-    const note = scale.notes[degree % scale.notes.length];
+    const note = scale.notes[(degree + scale.notes.length) % scale.notes.length];
 
     return note;
 }
@@ -198,6 +198,8 @@ function getNotesForString(scaleId, rootNote, string, numberOfFrets) {
             positions[i] = {
                 isScaleNote: true,
                 isHighlighted: false,
+                isChordNote: false,
+                chordScaleDegree: null,
             };
         }
     }
@@ -244,12 +246,16 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
                 .mapValues(note => {
                     const chordNote = _.find(chord, chordNote => chordNote.note === note % 12);
 
-                    const isChordNote = !_.isUndefined(chordNote);
-                    const chordScaleDegree = isChordNote ? chordNote.chordScaleDegree : undefined;
+                    if (_.isUndefined(chordNote)) {
+                        return {
+                            isHighlighted: true,
+                        };
+                    }
 
                     return {
-                        isChordNote,
-                        chordScaleDegree,
+                        isHighlighted: true,
+                        isChordNote: true,
+                        chordScaleDegree: chordNote.chordScaleDegree,
                     };
                 })
                 .value()
@@ -261,9 +267,7 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
             if (allPositions[fret][string]) {
                 // The scale might not contain all the notes of the chord.
                 // For example, pentatonic scales.
-                allPositions[fret][string].isHighlighted = true;
-                allPositions[fret][string].isChordNote = position.isChordNote;
-                allPositions[fret][string].chordScaleDegree = position.chordScaleDegree;
+                Object.assign(allPositions[fret][string], position);
             }
         }
     }
