@@ -23,14 +23,15 @@ export default class Fretboards extends PureComponent {
             24,
         ];
 
-        const displayedNotes = getScalePositionsOnFretboard(
-            this.props.scale,
-            this.props.rootNote,
-            this.props.tuning.configuration,
-            numberOfFrets,
-            this.props.mode,
-            this.props.chord,
-        );
+        const displayedNotes = getScalePositionsOnFretboard({
+            scaleId: this.props.scale,
+            rootNote: this.props.rootNote,
+            stringConfiguration: this.props.tuning.configuration,
+            numberOfFrets: numberOfFrets,
+            mode: this.props.mode,
+            chord: this.props.chord,
+            showAllScaleNotes: this.props.showAllScaleNotes,
+        });
 
         return (
             <div
@@ -104,7 +105,7 @@ export default class Fretboards extends PureComponent {
                                     ...(fret === numberOfFrets && styles.highestFret),
                                 }}
                             >
-                                {displayedNotes[string] && displayedNotes[string][fret] &&
+                                {displayedNotes[string][fret].isScaleNote &&
                                     <div
                                         style={{
                                             ...styles.noteMarker,

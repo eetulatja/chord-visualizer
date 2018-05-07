@@ -59,14 +59,15 @@ describe('getChordScale', () => {
 describe('getScalePositionsOnFretboard', () => {
 
 	it('Get positions for C major scale (mode 1, chord I)', () => {
-		const positions = getScalePositionsOnFretboard(
-			'scale_majorScale',
-			0,
-			getTuningById('tuning_guitar_6string_standard').configuration,
-			24,
-			1,
-			getTriadFromScale(getScaleById('scale_majorScale'), 1, 0), // C major chord
-		);
+		const positions = getScalePositionsOnFretboard({
+			scaleId: 'scale_majorScale',
+			rootNote: 0,
+			stringConfiguration: getTuningById('tuning_guitar_6string_standard').configuration,
+			numberOfFrets: 24,
+			mode: 1,
+			chord: getTriadFromScale(getScaleById('scale_majorScale'), 1, 0), // C major chord
+			showAllScaleNotes: true,
+		});
 
 		expect(positions[6][7]).toEqual({
 			isScaleNote: true,
@@ -163,14 +164,15 @@ describe('getScalePositionsOnFretboard', () => {
 	});
 
 	it('Get positions for C major scale (mode 2, chord iii)', () => {
-		const positions = getScalePositionsOnFretboard(
-			'scale_majorScale',
-			0,
-			getTuningById('tuning_guitar_6string_standard').configuration,
-			24,
-			2,
-			getTriadFromScale(getScaleById('scale_majorScale'), 3, 0), // E minor chord
-		);
+		const positions = getScalePositionsOnFretboard({
+			scaleId: 'scale_majorScale',
+			rootNote: 0,
+			stringConfiguration: getTuningById('tuning_guitar_6string_standard').configuration,
+			numberOfFrets: 24,
+			mode: 2,
+			chord: getTriadFromScale(getScaleById('scale_majorScale'), 3, 0), // E minor chord
+			showAllScaleNotes: true,
+		});
 
 		expect(positions[6][8]).toEqual({
 			isScaleNote: true,

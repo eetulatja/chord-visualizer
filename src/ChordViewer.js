@@ -21,6 +21,7 @@ export default class ChordViewer extends PureComponent {
         this.decreaseMode = this.decreaseMode.bind(this);
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
+        this.toggleShowAllNotes = this.toggleShowAllNotes.bind(this);
 
         this.state = props.initialState || {
             rootNote: 0,
@@ -28,6 +29,7 @@ export default class ChordViewer extends PureComponent {
             chord: 1,
             tuning: getTuningById('tuning_guitar_6string_standard'),
             mode: 1,
+            showAllScaleNotes: false,
         };
     }
 
@@ -74,6 +76,12 @@ export default class ChordViewer extends PureComponent {
 
     removeChordViewer() {
         this.props.removeChordViewer(this.props.id);
+    }
+
+    toggleShowAllNotes(event) {
+        this.setState({
+            showAllScaleNotes: event.target.checked,
+        });
     }
 
 
@@ -156,6 +164,15 @@ export default class ChordViewer extends PureComponent {
                     <button onClick={this.copyChordViewer}>Duplicate</button>
                     <button onClick={this.removeChordViewer}>Remove</button>
                 </div>
+                <label style={styles.input}>
+                    Show all notes
+
+                    <input
+                        type='checkbox'
+                        value={this.state.showAllScaleNotes}
+                        onChange={this.toggleShowAllNotes}
+                    />
+                </label>
 
                 <Fretboard
                     scale={this.state.scale}
@@ -164,6 +181,7 @@ export default class ChordViewer extends PureComponent {
                     style={styles.fretboard}
                     mode={this.state.mode}
                     chord={selectedChord}
+                    showAllScaleNotes={this.state.showAllScaleNotes}
                 />
             </div>
         );

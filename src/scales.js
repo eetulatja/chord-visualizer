@@ -188,31 +188,49 @@ export function getChordScale(scaleId) {
     return chordScale;
 }
 
-function getNotesForString(scaleId, rootNote, string, numberOfFrets) {
+function getNotesForString(scaleId, rootNote, string, numberOfFrets, showAllScaleNotes) {
     const scale = getScaleById(scaleId);
     const scaleNotes = scale.notes.map(note => (note + rootNote) % 12);
 
-    const positions = {};
-    for (let i = 0; i <= numberOfFrets; i++) {
-        if (scaleNotes.includes((string.openNote + i) % 12)) {
-            positions[i] = {
-                isScaleNote: true,
-                isHighlighted: false,
-                isChordNote: false,
-                chordScaleDegree: null,
-            };
+    // TODO Optimization: Move outside to prevent creating a new object on every function call.
+    const emptyNote = {
+        isScaleNote: false,
+        isHighlighted: false,
+        isChordNote: false,
+        chordScaleDegree: null,
+    };
+
+    const positions = _.range(numberOfFrets + 1).map(() => ({ ...emptyNote}));
+
+    if (showAllScaleNotes) {
+        for (let i = 0; i <= numberOfFrets; i++) {
+            if (scaleNotes.includes((string.openNote + i) % 12)) {
+                positions[i] = {
+                    ...positions[i],
+                    isScaleNote: true,
+                };
+            }
         }
     }
 
     return positions;
 }
 
-export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfiguration, numberOfFrets, mode, chord) {
+export function getScalePositionsOnFretboard({
+    scaleId,
+    rootNote,
+    stringConfiguration,
+    numberOfFrets,
+    mode,
+    chord,
+    showAllScaleNotes,
+}) {
     const allPositions =_.mapValues(stringConfiguration, string => getNotesForString(
         scaleId,
         rootNote,
         string,
         numberOfFrets,
+        showAllScaleNotes,
     ));
 
     const numberOfStrings = Object.keys(stringConfiguration).length;
@@ -248,11 +266,13 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
 
                     if (_.isUndefined(chordNote)) {
                         return {
+                            isScaleNote: true,
                             isHighlighted: true,
                         };
                     }
 
                     return {
+                        isScaleNote: true,
                         isHighlighted: true,
                         isChordNote: true,
                         chordScaleDegree: chordNote.chordScaleDegree,
@@ -264,11 +284,10 @@ export function getScalePositionsOnFretboard(scaleId, rootNote, stringConfigurat
 
     for (const [ fret, stringPositions ] of Object.entries(selectedModePositions)) {
         for (const [ string, position ] of Object.entries(stringPositions)) {
-            if (allPositions[fret][string]) {
-                // The scale might not contain all the notes of the chord.
-                // For example, pentatonic scales.
-                Object.assign(allPositions[fret][string], position);
-            }
+            allPositions[fret][string] = {
+                ...allPositions[fret][string],
+                ...position,
+            };
         }
     }
 
