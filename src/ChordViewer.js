@@ -13,6 +13,7 @@ export default class ChordViewer extends PureComponent {
     constructor(props) {
         super(props);
 
+        this.toggleControlsVisibility = this.toggleControlsVisibility.bind(this);
         this.selectRootNote = this.selectRootNote.bind(this);
         this.selectScale = this.selectScale.bind(this);
         this.selectChord = this.selectChord.bind(this);
@@ -22,8 +23,9 @@ export default class ChordViewer extends PureComponent {
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
         this.toggleShowAllNotes = this.toggleShowAllNotes.bind(this);
-
+console.log(props.initialState)
         this.state = props.initialState || {
+            controlsVisible: false,
             rootNote: 0,
             scale: 'scale_majorScale',
             chord: 1,
@@ -33,6 +35,12 @@ export default class ChordViewer extends PureComponent {
         };
     }
 
+
+    toggleControlsVisibility() {
+        this.setState(prevState => ({
+            controlsVisible: !prevState.controlsVisible,
+        }));
+    }
 
     selectRootNote(event) {
         this.setState({
@@ -91,90 +99,99 @@ export default class ChordViewer extends PureComponent {
 
         return (
             <div style={styles.wrapper}>
-                <div style={styles.controls}>
-                    <label style={styles.input}>
-                        Root
-
-                        <select
-                            value={this.state.rootNote}
-                            onChange={this.selectRootNote}
-                        >
-                            {notes.map((note, i) => (
-                                <option key={i} value={i}>{note}</option>
-                            ))}
-                        </select>
-                    </label>
-
-                    <label style={styles.input}>
-                        Scale
-
-                        <select
-                            value={this.state.scale}
-                            onChange={this.selectScale}
-                        >
-                            {_.map(scales, scale => (
-                                <option key={scale.id} value={scale.id}>{scale.name}</option>
-                            ))}
-                        </select>
-                    </label>
-
-                    <label style={styles.input}>
-                        Chord
-
-                        <select
-                            value={this.state.chord}
-                            onChange={this.selectChord}
-                        >
-                            {[ 1, 2, 3, 4, 5, 6, 7 ].map((chord, i) => (
-                                <option key={i} value={chord}>{chord}</option>
-                            ))}
-                        </select>
-
-                        <span style={styles.chordNote}>
-                            {getChordType(selectedChord).name}
-                        </span>
-
-                        Notes:
-                        {selectedChord.map(chordNote => (
-                            <span key={chordNote.note} style={styles.chordNote}>
-                                {notes[chordNote.note]}
-                            </span>
-                        ))}
-                    </label>
-
-                    <label style={styles.input}>
-                        Tuning
-
-                        <select
-                            value={this.state.tuning.id}
-                            onChange={this.selectTuning}
-                        >
-                            {tunings.map(tuning => (
-                                <option key={tuning.id} value={tuning.id}>{tuning.title}</option>
-                            ))}
-                        </select>
-                    </label>
-
-                    <div style={styles.input}>
-                        Mode: {this.state.mode}
-                        <button onClick={this.decreaseMode}>&lt;</button>
-                        <button onClick={this.increaseMode}>&gt;</button>
-                    </div>
-
-                    <div style={styles.input}>
-                        <button onClick={this.copyChordViewer}>Duplicate</button>
-                        <button onClick={this.removeChordViewer}>Remove</button>
-                    </div>
-                    <label style={styles.input}>
-                        Show all notes
-
-                        <input
-                            type='checkbox'
-                            value={this.state.showAllScaleNotes}
-                            onChange={this.toggleShowAllNotes}
-                        />
-                    </label>
+                <div style={styles.chordNameContainer}>
+                    <button onClick={this.toggleControlsVisibility}>
+                        {this.state.controlsVisible ? 'Hide controls' : 'Show controls'}
+                    </button>
+                    <div style={styles.chordName}>{getChordType(selectedChord).name}</div>
                 </div>
+
+                {this.state.controlsVisible &&
+                    <div style={styles.controls}>
+                        <label style={styles.input}>
+                            Root
+
+                            <select
+                                value={this.state.rootNote}
+                                onChange={this.selectRootNote}
+                            >
+                                {notes.map((note, i) => (
+                                    <option key={i} value={i}>{note}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label style={styles.input}>
+                            Scale
+
+                            <select
+                                value={this.state.scale}
+                                onChange={this.selectScale}
+                            >
+                                {_.map(scales, scale => (
+                                    <option key={scale.id} value={scale.id}>{scale.name}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label style={styles.input}>
+                            Chord
+
+                            <select
+                                value={this.state.chord}
+                                onChange={this.selectChord}
+                            >
+                                {[ 1, 2, 3, 4, 5, 6, 7 ].map((chord, i) => (
+                                    <option key={i} value={chord}>{chord}</option>
+                                ))}
+                            </select>
+
+                            <span style={styles.chordNote}>
+                                {getChordType(selectedChord).name}
+                            </span>
+
+                            Notes:
+                            {selectedChord.map(chordNote => (
+                                <span key={chordNote.note} style={styles.chordNote}>
+                                    {notes[chordNote.note]}
+                                </span>
+                            ))}
+                        </label>
+
+                        <label style={styles.input}>
+                            Tuning
+
+                            <select
+                                value={this.state.tuning.id}
+                                onChange={this.selectTuning}
+                            >
+                                {tunings.map(tuning => (
+                                    <option key={tuning.id} value={tuning.id}>{tuning.title}</option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <div style={styles.input}>
+                            Mode: {this.state.mode}
+                            <button onClick={this.decreaseMode}>&lt;</button>
+                            <button onClick={this.increaseMode}>&gt;</button>
+                        </div>
+
+                        <div style={styles.input}>
+                            <button onClick={this.copyChordViewer}>Duplicate</button>
+                            <button onClick={this.removeChordViewer}>Remove</button>
+                        </div>
+                        <label style={styles.input}>
+                            Show all notes
+
+                            <input
+                                type='checkbox'
+                                checked={this.state.showAllScaleNotes}
+                                onChange={this.toggleShowAllNotes}
+                            />
+                        </label>
+                    </div>
+                }
 
                 <Fretboard
                     scale={this.state.scale}
@@ -194,6 +211,18 @@ export default class ChordViewer extends PureComponent {
 const styles = {
     wrapper: {
         display: 'flex',
+    },
+    chordNameContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    chordName: {
+        fontSize: '4rem',
+        fontWeight: 500,
+
+        marginRight: '1rem',
     },
     controls: {
         display: 'flex',

@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import _ from 'lodash';
 
 import { getScalePositionsOnFretboard } from './scales';
-import { getChordType } from './chords';
 
 
 export default class Fretboards extends PureComponent {
@@ -36,8 +35,6 @@ export default class Fretboards extends PureComponent {
 
         return (
             <div style={styles.fretboardRow}>
-                <div style={styles.chordName}>{getChordType(this.props.chord).name}</div>
-
                 <div
                     style={{
                         ...styles.fretboard,
@@ -141,12 +138,6 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    chordName: {
-        fontSize: '4rem',
-        fontWeight: 500,
-
-        marginRight: '1rem',
     },
     fretboard: {
         position: 'relative',
