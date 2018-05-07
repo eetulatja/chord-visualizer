@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,UACC,WAAa,CAGd,KACI,SACA,UACA,oCACA,eAAiB","file":"static/css/main.65b7292e.css","sourcesContent":["html, body {\n\theight: 100%;\n}\n\nbody {\n    margin: 0;\n    padding: 0;\n    font-family: 'Proxima Nova', sans-serif;\n    font-weight: 300;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/index.css"],"sourceRoot":""}
