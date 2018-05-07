@@ -90,7 +90,7 @@ export default class ChordViewer extends PureComponent {
         const selectedChord = getTriadFromScale(chordScale, this.state.chord, this.state.rootNote);
 
         return (
-            <div style={styles.rootNote}>
+            <div style={styles.wrapper}>
                 <label style={styles.input}>
                     Root
 
@@ -190,7 +190,7 @@ export default class ChordViewer extends PureComponent {
 }
 
 const styles = {
-    rootNote: {
+    wrapper: {
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',

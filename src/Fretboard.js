@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import _ from 'lodash';
 
 import { getScalePositionsOnFretboard } from './scales';
+import { getChordType } from './chords';
 
 
 export default class Fretboards extends PureComponent {
@@ -34,92 +35,96 @@ export default class Fretboards extends PureComponent {
         });
 
         return (
-            <div
-                style={{
-                    ...styles.fretboard,
-                    ...this.props.style,
-                }}
-            >
-                {markerDotFrets.map(markerFret => {
-                    const top = `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`;
-                    const left = `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
+            <div style={styles.fretboardRow}>
+                <div style={styles.chordName}>{getChordType(this.props.chord).name}</div>
 
-                    if (markerFret % 12 !== 0) {
-                        return (
-                            <div
-                                key={markerFret}
-                                style={{
-                                    ...styles.markerDot,
-                                    top,
-                                    left,
-                                }}
-                            />
-                        );
-                    }
-                    else {
-                        return (
-                            <div
-                                key={markerFret}
-                                style={{
-                                    ...styles.doubleMarkerDot,
-                                    top,
-                                    left,
-                                }}
-                            >
+                <div
+                    style={{
+                        ...styles.fretboard,
+                        ...this.props.style,
+                    }}
+                >
+                    {markerDotFrets.map(markerFret => {
+                        const top = `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`;
+                        const left = `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
+
+                        if (markerFret % 12 !== 0) {
+                            return (
                                 <div
+                                    key={markerFret}
                                     style={{
                                         ...styles.markerDot,
-                                        top: `${-fretHeight}rem`,
+                                        top,
+                                        left,
                                     }}
                                 />
+                            );
+                        }
+                        else {
+                            return (
                                 <div
+                                    key={markerFret}
                                     style={{
-                                        ...styles.markerDot,
-                                        top: `${fretHeight}rem`,
+                                        ...styles.doubleMarkerDot,
+                                        top,
+                                        left,
                                     }}
-                                />
-                            </div>
-                        );
-                    }
-                })}
-                {_.range(1, numberOfStrings + 1).map(string => (
-                    <div key={string} style={styles.string}>
-                        {_.range(numberOfFrets + 1).map(fret => (
-                            // If we just use fret number as the key, React will mess up the styles when switching tunings.
-                            // Therefore, we also add the tuning ID so that React generates new components when switching.
-                            <div
-                                key={`${this.props.tuning.id}.${fret}`}
-                                style={{
-                                    ...styles.fret,
-
-                                    // Frets on the second lowest string
-                                    ...(string === numberOfStrings - 1 && styles.secondLowestStringFret),
-
-                                    // Frets on the lowest string
-                                    ...(string === numberOfStrings && styles.lowestStringFret),
-
-                                    // Second highest frets on all but the lowest string
-                                    ...(fret === numberOfFrets - 1 && string !== numberOfStrings && styles.secondHighestFret),
-
-                                    // Highest frets
-                                    ...(fret === numberOfFrets && styles.highestFret),
-                                }}
-                            >
-                                {displayedNotes[string][fret].isScaleNote &&
+                                >
                                     <div
                                         style={{
-                                            ...styles.noteMarker,
-                                            ...(displayedNotes[string][fret].isHighlighted && styles.highlightedNoteMarker),
-                                            ...(displayedNotes[string][fret].isChordNote && styles.chordNoteMarker),
+                                            ...styles.markerDot,
+                                            top: `${-fretHeight}rem`,
                                         }}
-                                    >
-                                        {displayedNotes[string][fret].isChordNote && displayedNotes[string][fret].chordScaleDegree}
-                                    </div>
-                                }
-                            </div>
-                        ))}
-                    </div>
-                ))}
+                                    />
+                                    <div
+                                        style={{
+                                            ...styles.markerDot,
+                                            top: `${fretHeight}rem`,
+                                        }}
+                                    />
+                                </div>
+                            );
+                        }
+                    })}
+                    {_.range(1, numberOfStrings + 1).map(string => (
+                        <div key={string} style={styles.string}>
+                            {_.range(numberOfFrets + 1).map(fret => (
+                                // If we just use fret number as the key, React will mess up the styles when switching tunings.
+                                // Therefore, we also add the tuning ID so that React generates new components when switching.
+                                <div
+                                    key={`${this.props.tuning.id}.${fret}`}
+                                    style={{
+                                        ...styles.fret,
+
+                                        // Frets on the second lowest string
+                                        ...(string === numberOfStrings - 1 && styles.secondLowestStringFret),
+
+                                        // Frets on the lowest string
+                                        ...(string === numberOfStrings && styles.lowestStringFret),
+
+                                        // Second highest frets on all but the lowest string
+                                        ...(fret === numberOfFrets - 1 && string !== numberOfStrings && styles.secondHighestFret),
+
+                                        // Highest frets
+                                        ...(fret === numberOfFrets && styles.highestFret),
+                                    }}
+                                >
+                                    {displayedNotes[string][fret].isScaleNote &&
+                                        <div
+                                            style={{
+                                                ...styles.noteMarker,
+                                                ...(displayedNotes[string][fret].isHighlighted && styles.highlightedNoteMarker),
+                                                ...(displayedNotes[string][fret].isChordNote && styles.chordNoteMarker),
+                                            }}
+                                        >
+                                            {displayedNotes[string][fret].isChordNote && displayedNotes[string][fret].chordScaleDegree}
+                                        </div>
+                                    }
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }
@@ -132,6 +137,17 @@ const fretHeight = 2;
 const markerDiameter = 1.5;
 
 const styles = {
+    fretboardRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    chordName: {
+        fontSize: '4rem',
+        fontWeight: 500,
+
+        marginRight: '1rem',
+    },
     fretboard: {
         position: 'relative',
 
