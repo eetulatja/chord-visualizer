@@ -9,6 +9,7 @@
   "homepage": "http://scales.latja.fi",
   "repository": "github:eetulatja/chord-visualizer",
   "dependencies": {
+    "downloadjs": "^1.4.7",
     "gh-pages": "^1.1.0",
     "lodash": "^4.17.5",
     "react": "^16.2.0",

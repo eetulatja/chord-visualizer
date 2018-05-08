@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
+import download from 'downloadjs';
 
 import ChordViewer from './ChordViewer';
 
@@ -13,6 +14,8 @@ class App extends PureComponent {
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
         this.toggleControlsVisibility = this.toggleControlsVisibility.bind(this);
+        this.downloadJson = this.downloadJson.bind(this);
+        this.updateChordViewerState = this.updateChordViewerState.bind(this);
 
         this.state = {
             chordViewers: [
@@ -95,9 +98,27 @@ class App extends PureComponent {
         this.setState({ chordViewers });
     }
 
+    downloadJson() {
+        const exportedState = {
+            ...this.state,
+            chordViewers: this.state.chordViewers.map(chordViewer => _.omit(chordViewer, 'initialState')),
+        };
+
+        download(JSON.stringify(exportedState), 'song.json', 'application/json');
+    }
+
+    updateChordViewerState(id, state) {
+        const chordViewer = _.find(this.state.chordViewers, { id });
+
+        // Do not update via setState to prevent a re-render.
+        // TODO Refactor this huge hack in a better way.
+        chordViewer.state = state;
+    }
+
     render() {
         return (
             <div>
+                <button onClick={this.downloadJson}>Download</button>
                 {this.state.chordViewers.length === 0 &&
                     <button onClick={this.createNewChordViewer}>+</button>
                 }
@@ -110,6 +131,7 @@ class App extends PureComponent {
                         initialState={initialState}
                         controlsVisible={controlsVisible}
                         toggleControlsVisibility={this.toggleControlsVisibility}
+                        updateChordViewerState={this.updateChordViewerState}
                     />
                 ))}
             </div>

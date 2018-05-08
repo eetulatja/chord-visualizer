@@ -43,6 +43,14 @@ export default class ChordViewer extends PureComponent {
         };
     }
 
+    componentDidMount() {
+        this.props.updateChordViewerState(this.props.id, this.state);
+    }
+
+    componentDidUpdate() {
+        this.props.updateChordViewerState(this.props.id, this.state);
+    }
+
 
     toggleControlsVisibility() {
         this.props.toggleControlsVisibility(this.props.id, this.props.controlsVisible);
