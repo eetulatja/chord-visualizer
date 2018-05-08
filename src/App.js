@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
 import download from 'downloadjs';
+import FileDownload from 'react-icons/lib/md/file-download';
+import FileUpload from 'react-icons/lib/md/file-upload';
 
 import ChordViewer from './ChordViewer';
 
@@ -145,8 +147,23 @@ class App extends PureComponent {
     render() {
         return (
             <div>
-                <button onClick={this.exportJson}>Export</button>
-                <input type='file' name='Import' onChange={this.importJson}></input>
+                <div style={styles.icon}>
+                    <FileDownload
+                        title='Export'
+                        size='1.5rem'
+                        onClick={this.exportJson}
+                    />
+                    <span style={styles.iconText}>Export</span>
+                </div>
+                <label style={styles.icon}>
+                    <FileUpload
+                        title='Import'
+                        size='1.5rem'
+                    />
+                    <input type='file' name='Import' onChange={this.importJson} style={styles.fileInput}></input>
+                    <span style={styles.iconText}>Import</span>
+                </label>
+
                 {this.state.chordViewers.length === 0 &&
                     <button onClick={this.createNewChordViewer}>+</button>
                 }
@@ -169,3 +186,24 @@ class App extends PureComponent {
 }
 
 export default App;
+
+const styles = {
+    icon: {
+        display: 'inline-block',
+
+        margin: '0.5rem',
+
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderRadius: 5,
+
+        cursor: 'pointer',
+    },
+    iconText: {
+        margin: '0.4rem',
+        lineHeight: 1.5,
+    },
+    fileInput: {
+        display: 'none',
+    },
+};

@@ -161,18 +161,21 @@ export default class ChordViewer extends PureComponent {
                 <div style={styles.controls}>
                     <div style={styles.input}>
                         <MdSettings
+                            title='Settings'
                             size='1.5rem'
                             style={styles.icon}
                             color={this.props.controlsVisible ? 'grey' : 'black'}
                             onClick={this.toggleControlsVisibility}
                         />
                         <MdContentCopy
+                            title='Duplicate'
                             size='1.5rem'
                             style={styles.icon}
                             color='black'
                             onClick={this.copyChordViewer}
                         />
                         <MdDelete
+                            title='Delete'
                             size='1.5rem'
                             style={styles.icon}
                             color='black'
