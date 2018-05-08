@@ -293,7 +293,8 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '15rem',
+
+        width: '17rem',
     },
     chordName: {
         fontSize: '4rem',
