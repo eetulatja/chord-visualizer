@@ -96,7 +96,7 @@ export default class ChordViewer extends PureComponent {
 
         return (
             <div style={styles.wrapper}>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={styles.topRow}>
                     <div style={styles.chordNameContainer}>
                         <button onClick={this.toggleControlsVisibility}>
                             {this.props.controlsVisible ? 'Hide controls' : 'Show controls'}
@@ -210,11 +210,16 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
     },
+    topRow: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
     chordNameContainer: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        width: '15rem',
     },
     chordName: {
         fontSize: '4rem',
