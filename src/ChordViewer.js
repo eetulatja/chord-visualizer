@@ -25,7 +25,6 @@ export default class ChordViewer extends PureComponent {
         this.toggleShowAllNotes = this.toggleShowAllNotes.bind(this);
 
         this.state = props.initialState || {
-            controlsVisible: true,
             rootNote: 0,
             scale: 'scale_majorScale',
             chord: 1,
@@ -37,9 +36,7 @@ export default class ChordViewer extends PureComponent {
 
 
     toggleControlsVisibility() {
-        this.setState(prevState => ({
-            controlsVisible: !prevState.controlsVisible,
-        }));
+        this.props.toggleControlsVisibility(this.props.id, this.props.controlsVisible);
     }
 
     selectRootNote(event) {
@@ -102,7 +99,7 @@ export default class ChordViewer extends PureComponent {
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={styles.chordNameContainer}>
                         <button onClick={this.toggleControlsVisibility}>
-                            {this.state.controlsVisible ? 'Hide controls' : 'Show controls'}
+                            {this.props.controlsVisible ? 'Hide controls' : 'Show controls'}
                         </button>
                         <div style={styles.chordName}>{getChordType(selectedChord).name}</div>
                     </div>
@@ -118,7 +115,7 @@ export default class ChordViewer extends PureComponent {
                     />
                 </div>
 
-                {this.state.controlsVisible &&
+                {this.props.controlsVisible &&
                     <div style={styles.controls}>
                         <label style={styles.input}>
                             Root

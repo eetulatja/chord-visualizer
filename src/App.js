@@ -11,11 +11,13 @@ class App extends PureComponent {
 
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
+        this.toggleControlsVisibility = this.toggleControlsVisibility.bind(this);
 
         this.state = {
             chordViewers: [
                 {
                     id: String(Date.now()),
+                    controlsVisible: true,
                 },
             ],
         };
@@ -25,10 +27,23 @@ class App extends PureComponent {
         const newChordViewerState = {
             id: String(Date.now()),
             initialState: _.cloneDeep(state),
+            controlsVisible: true,
         };
 
+        // Hide controls from existing fretboards.
+        const currentChordViewers = this.state.chordViewers.map(chordViewer => {
+            if (chordViewer.controlsVisible) {
+                chordViewer = {
+                    ...chordViewer,
+                    controlsVisible: false,
+                };
+            }
+
+            return chordViewer;
+        });
+
         const chordViewers = [
-            ...this.state.chordViewers,
+            ...currentChordViewers,
             newChordViewerState,
         ];
 
@@ -41,16 +56,39 @@ class App extends PureComponent {
         this.setState({ chordViewers });
     }
 
+    toggleControlsVisibility(id, controlsVisible) {
+        const chordViewers = this.state.chordViewers.map(chordViewer => {
+            if (chordViewer.id === id) {
+                chordViewer = {
+                    ...chordViewer,
+                    controlsVisible: !chordViewer.controlsVisible,
+                };
+            }
+            else if (chordViewer.controlsVisible) {
+                chordViewer = {
+                    ...chordViewer,
+                    controlsVisible: false,
+                };
+            }
+
+            return chordViewer;
+        });
+
+        this.setState({ chordViewers });
+    }
+
     render() {
         return (
             <div>
-                {this.state.chordViewers.map(({ id, initialState }) => (
+                {this.state.chordViewers.map(({ id, initialState, controlsVisible }) => (
                     <ChordViewer
                         key={id}
                         id={id}
                         copyChordViewer={this.copyChordViewer}
                         removeChordViewer={this.removeChordViewer}
                         initialState={initialState}
+                        controlsVisible={controlsVisible}
+                        toggleControlsVisibility={this.toggleControlsVisibility}
                     />
                 ))}
             </div>
