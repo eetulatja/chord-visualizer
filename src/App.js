@@ -14,8 +14,9 @@ class App extends PureComponent {
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
         this.toggleControlsVisibility = this.toggleControlsVisibility.bind(this);
-        this.downloadJson = this.downloadJson.bind(this);
+        this.exportJson = this.exportJson.bind(this);
         this.updateChordViewerState = this.updateChordViewerState.bind(this);
+        this.importJson = this.importJson.bind(this);
 
         this.state = {
             chordViewers: [
@@ -98,7 +99,7 @@ class App extends PureComponent {
         this.setState({ chordViewers });
     }
 
-    downloadJson() {
+    exportJson() {
         const exportedState = {
             ...this.state,
             chordViewers: this.state.chordViewers.map(chordViewer => _.omit(chordViewer, 'initialState')),
@@ -115,10 +116,37 @@ class App extends PureComponent {
         chordViewer.state = state;
     }
 
+    importJson(event) {
+        const { files } = event.target;
+        const inputElement = event.target;
+
+        if (files.length === 1) {
+            const file = files[0];
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const importedState = JSON.parse(reader.result);
+                console.log(importedState)
+
+                this.setState({
+                    ...importedState,
+                    chordViewers: importedState.chordViewers.map(chordViewer => ({
+                        ...chordViewer,
+                        initialState: chordViewer.state,
+                    })),
+                });
+
+                inputElement.value = '';
+            }
+            reader.readAsText(file);
+        }
+    }
+
     render() {
         return (
             <div>
-                <button onClick={this.downloadJson}>Download</button>
+                <button onClick={this.exportJson}>Export</button>
+                <input type='file' name='Import' onChange={this.importJson}></input>
                 {this.state.chordViewers.length === 0 &&
                     <button onClick={this.createNewChordViewer}>+</button>
                 }
