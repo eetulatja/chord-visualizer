@@ -23,9 +23,9 @@ export default class ChordViewer extends PureComponent {
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
         this.toggleShowAllNotes = this.toggleShowAllNotes.bind(this);
-console.log(props.initialState)
+
         this.state = props.initialState || {
-            controlsVisible: false,
+            controlsVisible: true,
             rootNote: 0,
             scale: 'scale_majorScale',
             chord: 1,
@@ -142,15 +142,13 @@ console.log(props.initialState)
                                 onChange={this.selectChord}
                             >
                                 {[ 1, 2, 3, 4, 5, 6, 7 ].map((chord, i) => (
-                                    <option key={i} value={chord}>{chord}</option>
+                                    <option key={i} value={chord}>
+                                        {chord} ({getChordType(getTriadFromScale(chordScale, chord, this.state.rootNote)).name})
+                                    </option>
                                 ))}
                             </select>
 
-                            <span style={styles.chordNote}>
-                                {getChordType(selectedChord).name}
-                            </span>
-
-                            Notes:
+                            <span style={styles.notesText}>Notes:</span>
                             {selectedChord.map(chordNote => (
                                 <span key={chordNote.note} style={styles.chordNote}>
                                     {notes[chordNote.note]}
@@ -230,13 +228,13 @@ const styles = {
         flexDirection: 'column',
     },
     input: {
-        margin: 10,
+        margin: '0.5rem',
     },
-    chordNotes: {
-        display: 'flex',
+    notesText: {
+        marginLeft: '1rem',
     },
     chordNote: {
-        margin: 10,
+        margin: '0.5rem',
     },
     fretboard: {
         marginTop: '1rem',
