@@ -1,5 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import _ from 'lodash';
+import MdSettings from 'react-icons/lib/md/settings';
+import MdContentCopy from 'react-icons/lib/md/content-copy';
+import MdDelete from 'react-icons/lib/md/delete';
 
 import notes from './notes';
 import scales, { getScaleById, getChordScale } from './scales';
@@ -114,11 +117,24 @@ export default class ChordViewer extends PureComponent {
 
                 <div style={styles.controls}>
                     <div style={styles.input}>
-                        <button onClick={this.toggleControlsVisibility}>
-                            {this.props.controlsVisible ? 'Hide controls' : 'Show controls'}
-                        </button>
-                        <button onClick={this.copyChordViewer}>Duplicate</button>
-                        <button onClick={this.removeChordViewer}>Remove</button>
+                        <MdSettings
+                            size='1.5rem'
+                            style={styles.icon}
+                            color={this.props.controlsVisible ? 'grey' : 'black'}
+                            onClick={this.toggleControlsVisibility}
+                        />
+                        <MdContentCopy
+                            size='1.5rem'
+                            style={styles.icon}
+                            color='black'
+                            onClick={this.copyChordViewer}
+                        />
+                        <MdDelete
+                            size='1.5rem'
+                            style={styles.icon}
+                            color='black'
+                            onClick={this.removeChordViewer}
+                        />
                     </div>
 
                     {this.props.controlsVisible &&
@@ -237,6 +253,16 @@ const styles = {
     },
     input: {
         margin: '0.5rem',
+    },
+    icon: {
+        margin: '0.5rem',
+        marginTop: '-1rem', // TODO REMOVE
+
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderRadius: 5,
+
+        cursor: 'pointer',
     },
     notesText: {
         marginLeft: '1rem',
