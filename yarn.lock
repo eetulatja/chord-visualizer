@@ -5554,6 +5554,10 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^2.0.0"
     inherits "^2.0.1"
 
+roman-numeral@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/roman-numeral/-/roman-numeral-0.2.6.tgz#03fecb55ac57150015cf1e200db31d83b8c33513"
+
 run-async@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.3.0.tgz#0371ab4ae0bdd720d4166d7dfda64ff7a445a6c0"

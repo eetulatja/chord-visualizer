@@ -3,6 +3,7 @@ import _ from 'lodash';
 import MdSettings from 'react-icons/lib/md/settings';
 import MdContentCopy from 'react-icons/lib/md/content-copy';
 import MdDelete from 'react-icons/lib/md/delete';
+import romanNumeral from 'roman-numeral';
 
 import notes from './notes';
 import scales, { getScaleById, getChordScale } from './scales';
@@ -139,7 +140,9 @@ export default class ChordViewer extends PureComponent {
             <div style={styles.wrapper}>
                 <div style={styles.topRow}>
                     <div style={styles.chordNameContainer}>
-                        <div style={styles.chordName}>{getChordType(selectedChord).name}</div>
+                        <div style={styles.chordName}>
+                            <span>{romanNumeral.convert(this.state.chord)}</span> <span style={{ fontSize: 'smaller', color: 'darkgray' }}>{getChordType(selectedChord).name}</span>
+                        </div>
                     </div>
 
                     <Fretboard
@@ -214,7 +217,7 @@ export default class ChordViewer extends PureComponent {
                                 >
                                     {[ 1, 2, 3, 4, 5, 6, 7 ].map((chord, i) => (
                                         <option key={i} value={chord}>
-                                            {chord} ({getChordType(getTriadFromScale(chordScale, chord, this.state.rootNote)).name})
+                                            {romanNumeral.convert(chord)} ({getChordType(getTriadFromScale(chordScale, chord, this.state.rootNote)).name})
                                         </option>
                                     ))}
                                 </select>
