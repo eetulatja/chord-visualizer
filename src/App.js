@@ -128,7 +128,6 @@ class App extends PureComponent {
             const reader = new FileReader();
             reader.onload = () => {
                 const importedState = JSON.parse(reader.result);
-                console.log(importedState)
 
                 this.setState({
                     ...importedState,
@@ -147,11 +146,13 @@ class App extends PureComponent {
     render() {
         return (
             <div>
-                <div style={styles.icon}>
+                <div
+                    style={styles.icon}
+                    onClick={this.exportJson}
+                >
                     <FileDownload
                         title='Export'
                         size='1.5rem'
-                        onClick={this.exportJson}
                     />
                     <span style={styles.iconText}>Export</span>
                 </div>
