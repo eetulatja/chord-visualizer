@@ -76,7 +76,7 @@ export default class ChordViewer extends PureComponent {
     }
 
     copyChordViewer() {
-        this.props.copyChordViewer(this.state);
+        this.props.copyChordViewer(this.props.id, this.state);
     }
 
     removeChordViewer() {

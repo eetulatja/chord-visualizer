@@ -23,7 +23,7 @@ class App extends PureComponent {
         };
     }
 
-    copyChordViewer(state) {
+    copyChordViewer(id, state) {
         const newChordViewerState = {
             id: String(Date.now()),
             initialState: _.cloneDeep(state),
@@ -42,9 +42,13 @@ class App extends PureComponent {
             return chordViewer;
         });
 
+        const index = _.findIndex(currentChordViewers, { id });
+
+        // Insert the new fretboard below the one from which it was copied.
         const chordViewers = [
-            ...currentChordViewers,
+            ...currentChordViewers.slice(0, index + 1),
             newChordViewerState,
+            ...currentChordViewers.slice(index + 1),
         ];
 
         this.setState({ chordViewers });
@@ -65,6 +69,7 @@ class App extends PureComponent {
                 };
             }
             else if (chordViewer.controlsVisible) {
+                // Hide controls from all other fretboards if they're open.
                 chordViewer = {
                     ...chordViewer,
                     controlsVisible: false,
