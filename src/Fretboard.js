@@ -31,6 +31,8 @@ export default class Fretboards extends PureComponent {
             mode: this.props.mode,
             chord: this.props.chord,
             showAllScaleNotes: this.props.showAllScaleNotes,
+            positionStart: this.props.positionStart,
+            positionEnd: this.props.positionEnd,
         });
 
         return (

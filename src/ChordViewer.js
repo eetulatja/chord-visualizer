@@ -26,6 +26,10 @@ export default class ChordViewer extends PureComponent {
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
         this.toggleShowAllNotes = this.toggleShowAllNotes.bind(this);
+        this.positionStartIncrement = this.positionStartIncrement.bind(this);
+        this.positionStartDecrement = this.positionStartDecrement.bind(this);
+        this.positionEndIncrement = this.positionEndIncrement.bind(this);
+        this.positionEndDecrement = this.positionEndDecrement.bind(this);
 
         this.state = props.initialState || {
             rootNote: 0,
@@ -34,6 +38,8 @@ export default class ChordViewer extends PureComponent {
             tuning: getTuningById('tuning_guitar_6string_standard'),
             mode: 1,
             showAllScaleNotes: false,
+            positionStart: 1,
+            positionEnd: 1,
         };
     }
 
@@ -92,6 +98,30 @@ export default class ChordViewer extends PureComponent {
         });
     }
 
+    positionStartIncrement() {
+        this.setState(prevState => ({
+            positionStart: prevState.positionStart + 1,
+        }));
+    }
+
+    positionStartDecrement() {
+        this.setState(prevState => ({
+            positionStart: prevState.positionStart - 1,
+        }));
+    }
+
+    positionEndIncrement() {
+        this.setState(prevState => ({
+            positionEnd: prevState.positionEnd + 1,
+        }));
+    }
+
+    positionEndDecrement() {
+        this.setState(prevState => ({
+            positionEnd: prevState.positionEnd - 1,
+        }));
+    }
+
 
     render() {
         const chordScale = getChordScale(this.state.scale);
@@ -112,6 +142,8 @@ export default class ChordViewer extends PureComponent {
                         mode={this.state.mode}
                         chord={selectedChord}
                         showAllScaleNotes={this.state.showAllScaleNotes}
+                        positionStart={this.state.positionStart}
+                        positionEnd={this.state.positionEnd}
                     />
                 </div>
 
@@ -204,6 +236,18 @@ export default class ChordViewer extends PureComponent {
                                 Mode: {this.state.mode}
                                 <button onClick={this.decreaseMode}>&lt;</button>
                                 <button onClick={this.increaseMode}>&gt;</button>
+                            </div>
+
+                            <div style={styles.input}>
+                                Start note: {this.state.positionStart}
+                                <button onClick={this.positionStartDecrement}>&lt;</button>
+                                <button onClick={this.positionStartIncrement}>&gt;</button>
+                            </div>
+
+                            <div style={styles.input}>
+                                End note: {this.state.positionEnd}
+                                <button onClick={this.positionEndDecrement}>&lt;</button>
+                                <button onClick={this.positionEndIncrement}>&gt;</button>
                             </div>
 
                             <label style={styles.input}>

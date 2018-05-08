@@ -224,6 +224,8 @@ export function getScalePositionsOnFretboard({
     mode,
     chord,
     showAllScaleNotes,
+    positionStart = 1,
+    positionEnd = 1,
 }) {
     const allPositions =_.mapValues(stringConfiguration, string => getNotesForString(
         scaleId,
@@ -255,6 +257,22 @@ export function getScalePositionsOnFretboard({
         ...notes.map(note => note + startingPosition + 2 * 12),
     ];
     const notesForStrings = _.slice(_.chunk(allNotes, scale.notesPerString), 0, numberOfStrings);
+
+    // Remove notes from the beginning.
+    for (let i = 1; i < positionStart; i++) {
+        const string = Math.floor((i - 1) / scale.notesPerString);
+        if (notesForStrings[string]) {
+            notesForStrings[string].shift();
+        }
+    }
+
+    // Remove notes from the end.
+    for (let i = 1; i < positionEnd; i++) {
+        const string = (numberOfStrings - 1) - Math.floor((i - 1) / scale.notesPerString);
+        if (notesForStrings[string]) {
+            notesForStrings[string].pop();
+        }
+    }
 
     const selectedModePositions = _(notesForStrings)
         .mapKeys((stringNotes, index) => numberOfStrings - index)
