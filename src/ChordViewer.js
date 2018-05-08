@@ -113,9 +113,13 @@ export default class ChordViewer extends PureComponent {
                 </div>
 
                 <div style={styles.controls}>
-                    <button onClick={this.toggleControlsVisibility}>
-                        {this.props.controlsVisible ? 'Hide controls' : 'Show controls'}
-                    </button>
+                    <div style={styles.input}>
+                        <button onClick={this.toggleControlsVisibility}>
+                            {this.props.controlsVisible ? 'Hide controls' : 'Show controls'}
+                        </button>
+                        <button onClick={this.copyChordViewer}>Duplicate</button>
+                        <button onClick={this.removeChordViewer}>Remove</button>
+                    </div>
 
                     {this.props.controlsVisible &&
                         <Fragment>
@@ -186,10 +190,6 @@ export default class ChordViewer extends PureComponent {
                                 <button onClick={this.increaseMode}>&gt;</button>
                             </div>
 
-                            <div style={styles.input}>
-                                <button onClick={this.copyChordViewer}>Duplicate</button>
-                                <button onClick={this.removeChordViewer}>Remove</button>
-                            </div>
                             <label style={styles.input}>
                                 Show all notes
 

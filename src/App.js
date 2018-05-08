@@ -9,6 +9,7 @@ class App extends PureComponent {
     constructor(...args) {
         super(...args);
 
+        this.createNewChordViewer = this.createNewChordViewer.bind(this);
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
         this.toggleControlsVisibility = this.toggleControlsVisibility.bind(this);
@@ -21,6 +22,18 @@ class App extends PureComponent {
                 },
             ],
         };
+    }
+
+    createNewChordViewer() {
+        const chordViewers = [
+            {
+                id: String(Date.now()),
+                controlsVisible: true,
+            },
+            ...this.state.chordViewers,
+        ];
+
+        this.setState({ chordViewers });
     }
 
     copyChordViewer(id, state) {
@@ -85,6 +98,9 @@ class App extends PureComponent {
     render() {
         return (
             <div>
+                {this.state.chordViewers.length === 0 &&
+                    <button onClick={this.createNewChordViewer}>+</button>
+                }
                 {this.state.chordViewers.map(({ id, initialState, controlsVisible }) => (
                     <ChordViewer
                         key={id}
