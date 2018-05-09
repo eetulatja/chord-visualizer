@@ -141,7 +141,7 @@ export default class ChordViewer extends PureComponent {
                 <div style={styles.topRow}>
                     <div style={styles.chordNameContainer}>
                         <div style={styles.chordName}>
-                            <span>{romanNumeral.convert(this.state.chord)}</span> <span style={{ fontSize: 'smaller', color: 'darkgray' }}>{getChordType(selectedChord).name}</span>
+                            {romanNumeral.convert(this.state.chord)} <span style={styles.chordNameText}>{getChordType(selectedChord).name}</span>
                         </div>
                     </div>
 
@@ -305,6 +305,10 @@ const styles = {
 
         marginRight: '1rem',
     },
+    chordNameText: {
+        fontSize: 'smaller',
+        color: 'darkgray',
+    },
     controls: {
         display: 'flex',
         alignItems: 'center',
@@ -314,8 +318,8 @@ const styles = {
         margin: '0.5rem',
     },
     icon: {
-        margin: '0.5rem',
-        marginTop: '-1rem', // TODO REMOVE
+        marginLeft: '0.5rem',
+        marginRight: '0.5rem',
 
         borderStyle: 'solid',
         borderWidth: 2,

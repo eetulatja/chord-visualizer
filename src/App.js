@@ -119,8 +119,8 @@ class App extends PureComponent {
     }
 
     importJson(event) {
-        const { files } = event.target;
         const inputElement = event.target;
+        const { files } = inputElement;
 
         if (files.length === 1) {
             const file = files[0];

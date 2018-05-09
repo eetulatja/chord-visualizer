@@ -119,6 +119,11 @@ export default class Fretboards extends PureComponent {
                                             {displayedNotes[string][fret].isChordNote && displayedNotes[string][fret].chordScaleDegree}
                                         </div>
                                     }
+                                    {string === numberOfStrings && markerDotFrets.includes(fret) &&
+                                        <div style={styles.fretNumber}>
+                                            {fret}
+                                        </div>
+                                    }
                                 </div>
                             ))}
                         </div>
@@ -211,5 +216,12 @@ const styles = {
     },
     chordNoteMarker: {
         backgroundColor: 'green',
+    },
+    fretNumber: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+
+        marginTop: `${markerDiameter / 2}rem`,
     },
 };
