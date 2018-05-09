@@ -45,7 +45,7 @@ export default class Fretboards extends PureComponent {
                 >
                     {markerDotFrets.map(markerFret => {
                         const top = `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`;
-                        const left = `${(markerFret - 1) * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
+                        const left = `${markerFret * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
 
                         if (markerFret % 12 !== 0) {
                             return (
@@ -101,11 +101,11 @@ export default class Fretboards extends PureComponent {
                                         // Frets on the lowest string
                                         ...(string === numberOfStrings && styles.lowestStringFret),
 
-                                        // Second highest frets on all but the lowest string
-                                        ...(fret === numberOfFrets - 1 && string !== numberOfStrings && styles.secondHighestFret),
+                                        // Fret number zero, i.e. the open string, and string is not the highest
+                                        ...(fret === 0 && string !== 1 && styles.zeroFret),
 
-                                        // Highest frets
-                                        ...(fret === numberOfFrets && styles.highestFret),
+                                        // Highest frets on all but the lowest string
+                                        ...(fret === numberOfFrets && string !== numberOfStrings && styles.highestFret),
                                     }}
                                 >
                                     {displayedNotes[string][fret].isScaleNote &&
@@ -175,6 +175,9 @@ const styles = {
         borderColor: 'black',
         borderWidth: 1,
     },
+    zeroFret: {
+        borderTopStyle: 'none',
+    },
     secondLowestStringFret: {
         borderBottomStyle: 'solid',
     },
@@ -183,11 +186,8 @@ const styles = {
         borderLeftStyle: 'solid',
         borderLeftColor: 'rgba(0, 0, 0, 0)',
     },
-    secondHighestFret: {
-        borderRightStyle: 'solid',
-    },
     highestFret: {
-        borderStyle: 'none',
+        borderRightStyle: 'solid',
     },
     noteMarker: {
         position: 'absolute',
@@ -197,7 +197,7 @@ const styles = {
         justifyContent: 'center',
 
         top: `${-markerDiameter / 2}rem`,
-        left: `${-fretWidth / 2 - markerDiameter / 2}rem`,
+        left: `${fretWidth / 2 - markerDiameter / 2}rem`,
 
         width: `${markerDiameter}rem`,
         height: `${markerDiameter}rem`,
