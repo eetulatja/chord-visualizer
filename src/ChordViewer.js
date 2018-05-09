@@ -26,11 +26,12 @@ export default class ChordViewer extends PureComponent {
         this.decreaseMode = this.decreaseMode.bind(this);
         this.copyChordViewer = this.copyChordViewer.bind(this);
         this.removeChordViewer = this.removeChordViewer.bind(this);
-        this.toggleShowAllNotes = this.toggleShowAllNotes.bind(this);
         this.positionStartIncrement = this.positionStartIncrement.bind(this);
         this.positionStartDecrement = this.positionStartDecrement.bind(this);
         this.positionEndIncrement = this.positionEndIncrement.bind(this);
         this.positionEndDecrement = this.positionEndDecrement.bind(this);
+        this.toggleShowAllNotes = this.toggleShowAllNotes.bind(this);
+        this.toggleMatchDisplayedFretsToPosition = this.toggleMatchDisplayedFretsToPosition.bind(this);
 
         this.state = props.initialState || {
             rootNote: 0,
@@ -38,9 +39,10 @@ export default class ChordViewer extends PureComponent {
             chord: 1,
             tuning: getTuningById('tuning_guitar_6string_standard'),
             mode: 1,
-            showAllScaleNotes: false,
             positionStart: 1,
             positionEnd: 1,
+            showAllScaleNotes: false,
+            matchDisplayedFretsToPosition: false,
         };
     }
 
@@ -101,12 +103,6 @@ export default class ChordViewer extends PureComponent {
         this.props.removeChordViewer(this.props.id);
     }
 
-    toggleShowAllNotes(event) {
-        this.setState({
-            showAllScaleNotes: event.target.checked,
-        });
-    }
-
     positionStartIncrement() {
         this.setState(prevState => ({
             positionStart: prevState.positionStart + 1,
@@ -131,6 +127,18 @@ export default class ChordViewer extends PureComponent {
         }));
     }
 
+    toggleShowAllNotes(event) {
+        this.setState({
+            showAllScaleNotes: event.target.checked,
+        });
+    }
+
+    toggleMatchDisplayedFretsToPosition(event) {
+        this.setState({
+            matchDisplayedFretsToPosition: event.target.checked,
+        });
+    }
+
 
     render() {
         const chordScale = getChordScale(this.state.scale);
@@ -152,9 +160,10 @@ export default class ChordViewer extends PureComponent {
                         style={styles.fretboard}
                         mode={this.state.mode}
                         chord={selectedChord}
-                        showAllScaleNotes={this.state.showAllScaleNotes}
                         positionStart={this.state.positionStart}
                         positionEnd={this.state.positionEnd}
+                        showAllScaleNotes={this.state.showAllScaleNotes}
+                        matchDisplayedFretsToPosition={this.state.matchDisplayedFretsToPosition}
                     />
                 </div>
 
@@ -271,6 +280,16 @@ export default class ChordViewer extends PureComponent {
                                     type='checkbox'
                                     checked={this.state.showAllScaleNotes}
                                     onChange={this.toggleShowAllNotes}
+                                />
+                            </label>
+
+                            <label style={styles.input}>
+                                Only display current position
+
+                                <input
+                                    type='checkbox'
+                                    checked={this.state.matchDisplayedFretsToPosition}
+                                    onChange={this.toggleMatchDisplayedFretsToPosition}
                                 />
                             </label>
                         </Fragment>

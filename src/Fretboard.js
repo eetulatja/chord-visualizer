@@ -23,7 +23,11 @@ export default class Fretboards extends PureComponent {
             24,
         ];
 
-        const displayedNotes = getScalePositionsOnFretboard({
+        const {
+            positions: displayedNotes,
+            lowestFret,
+            highestFret,
+        } = getScalePositionsOnFretboard({
             scaleId: this.props.scale,
             rootNote: this.props.rootNote,
             stringConfiguration: this.props.tuning.configuration,
@@ -35,6 +39,9 @@ export default class Fretboards extends PureComponent {
             positionEnd: this.props.positionEnd,
         });
 
+        const lowestDisplayedFret = (this.props.matchDisplayedFretsToPosition && lowestFret - 1 > 0) ? lowestFret - 1 : 0;
+        const highestDisplayedFret = (this.props.matchDisplayedFretsToPosition && highestFret + 1 < numberOfFrets) ? highestFret + 1 : numberOfFrets;
+
         return (
             <div style={styles.fretboardRow}>
                 <div
@@ -44,8 +51,12 @@ export default class Fretboards extends PureComponent {
                     }}
                 >
                     {markerDotFrets.map(markerFret => {
+                        if (markerFret < lowestDisplayedFret || markerFret > highestDisplayedFret) {
+                            return null;
+                        }
+
                         const top = `${fretHeight * (numberOfStrings - 1) / 2 - markerDiameter / 2}rem`;
-                        const left = `${markerFret * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
+                        const left = `${(markerFret - lowestDisplayedFret) * fretWidth + (fretWidth - markerDiameter) / 2}rem`;
 
                         if (markerFret % 12 !== 0) {
                             return (
@@ -87,7 +98,7 @@ export default class Fretboards extends PureComponent {
                     })}
                     {_.range(1, numberOfStrings + 1).map(string => (
                         <div key={string} style={styles.string}>
-                            {_.range(numberOfFrets + 1).map(fret => (
+                            {_.range(lowestDisplayedFret, highestDisplayedFret + 1).map(fret => (
                                 // If we just use fret number as the key, React will mess up the styles when switching tunings.
                                 // Therefore, we also add the tuning ID so that React generates new components when switching.
                                 <div
@@ -105,7 +116,7 @@ export default class Fretboards extends PureComponent {
                                         ...(fret === 0 && string !== 1 && styles.zeroFret),
 
                                         // Highest frets on all but the lowest string
-                                        ...(fret === numberOfFrets && string !== numberOfStrings && styles.highestFret),
+                                        ...(fret === highestDisplayedFret && string !== numberOfStrings && styles.highestFret),
                                     }}
                                 >
                                     {displayedNotes[string][fret].isScaleNote &&

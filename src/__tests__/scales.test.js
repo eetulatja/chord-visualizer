@@ -59,7 +59,7 @@ describe('getChordScale', () => {
 describe('getScalePositionsOnFretboard', () => {
 
 	it('Get positions for C major scale (mode 1, chord I)', () => {
-		const positions = getScalePositionsOnFretboard({
+		const { positions } = getScalePositionsOnFretboard({
 			scaleId: 'scale_majorScale',
 			rootNote: 0,
 			stringConfiguration: getTuningById('tuning_guitar_6string_standard').configuration,
@@ -164,7 +164,7 @@ describe('getScalePositionsOnFretboard', () => {
 	});
 
 	it('Get positions for C major scale (mode 2, chord iii)', () => {
-		const positions = getScalePositionsOnFretboard({
+		const { positions } = getScalePositionsOnFretboard({
 			scaleId: 'scale_majorScale',
 			rootNote: 0,
 			stringConfiguration: getTuningById('tuning_guitar_6string_standard').configuration,

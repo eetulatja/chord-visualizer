@@ -309,5 +309,17 @@ export function getScalePositionsOnFretboard({
         }
     }
 
-    return allPositions;
+    const lowestFret = _(selectedModePositions)
+        .map(stringPositions => _.min(Object.keys(stringPositions).map(Number)))
+        .min();
+
+    const highestFret = _(selectedModePositions)
+        .map(stringPositions => _.max(Object.keys(stringPositions).map(Number)))
+        .max();
+
+    return {
+        positions: allPositions,
+        lowestFret,
+        highestFret,
+    };
 }
